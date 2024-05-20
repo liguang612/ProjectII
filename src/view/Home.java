@@ -3,6 +3,8 @@ package View;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -11,17 +13,31 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.jdesktop.animation.timing.Animator;
+import org.jdesktop.animation.timing.TimingTarget;
+import org.jdesktop.animation.timing.TimingTargetAdapter;
+
 import Resources.Constants;
 import Resources.Constants.FontType;
 import View.Components.TextField;
 
 public class Home extends JPanel {
+    boolean isSearched = false;
     JPanel leftPanel;
     TextField searchBox = new TextField(new ImageIcon(Constants.imagePath + "search.png"),
             "Tìm kiếm đề thi", 14);
 
     public Home() {
         super();
+
+        TimingTarget target = new TimingTargetAdapter() {
+            @Override
+            public void timingEvent(float fraction) {
+                searchBox.setLocation(searchBox.getX(), 600 - (int) (500 * Math.pow(fraction, 0.5)));
+            }
+        };
+        Animator animator = new Animator(1000, target);
+        animator.setResolution(0);
 
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 0));
@@ -31,8 +47,33 @@ public class Home extends JPanel {
         label1.setFont(Constants.getFont(FontType.QUICKSAND_BOLD).deriveFont(70f));
         label1.setHorizontalAlignment(JLabel.CENTER);
 
+        searchBox.addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent ke) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent ke) {
+            }
+
+            @Override
+            public void keyTyped(KeyEvent ke) {
+                if (!searchBox.getText().isEmpty()) {
+                    leftPanel.remove(label1);
+                    if (!isSearched) {
+                        isSearched = true;
+                        animator.start();
+                    }
+                } else {
+                    isSearched = false;
+                    animator.cancel();
+                }
+            }
+        });
+        searchBox.setBackground(Constants.gray01);
         searchBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         searchBox.setPreferredSize(new Dimension(600, 60));
+        searchBox.setRadius(5);
 
         leftPanel = new JPanel();
         leftPanel.setBackground(Color.WHITE);

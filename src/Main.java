@@ -13,6 +13,7 @@ public class Main {
 
         UIManager.put("Button.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("Label.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
+        UIManager.put("TextField.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
 
         new Homepage();
     }

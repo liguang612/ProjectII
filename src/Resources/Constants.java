@@ -11,6 +11,8 @@ public class Constants {
 
     public static final Color blue01 = new Color(0x4A3AFF);
 
+    public static final Color gray01 = new Color(0xE7E7E7);
+
     public enum FontType {
         QUICKSAND_BOLD, QUICKSAND_REGULAR, ROBOTO_REGULAR
     }
