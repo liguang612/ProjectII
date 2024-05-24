@@ -1,7 +1,7 @@
 import javax.swing.UIManager;
 
 import Resources.Constants;
-import View.Homepage;
+import View.Home;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,6 +15,6 @@ public class Main {
         UIManager.put("Label.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("TextField.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
 
-        new Homepage();
+        new Home();
     }
 }

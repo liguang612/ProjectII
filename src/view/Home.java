@@ -1,90 +1,44 @@
 package View;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JFrame;
+import View.Components.Header;
 
-import org.jdesktop.animation.timing.Animator;
-import org.jdesktop.animation.timing.TimingTarget;
-import org.jdesktop.animation.timing.TimingTargetAdapter;
-
-import Resources.Constants;
-import Resources.Constants.FontType;
-import View.Components.TextField;
-
-public class Home extends JPanel {
-    boolean isSearched = false;
-    JPanel leftPanel;
-    TextField searchBox = new TextField(new ImageIcon(Constants.imagePath + "search.png"),
-            "Tìm kiếm đề thi", 14);
+public class Home {
+    private GridBagLayout gb = new GridBagLayout();
+    private GridBagConstraints gbc = new GridBagConstraints();
+    private Homepage homepage;
+    private JFrame homeFrame;
 
     public Home() {
-        super();
+        homeFrame = new JFrame("Phần mềm thi trắc nghiệm");
+        homeFrame.getContentPane().setBackground(Color.WHITE);
+        homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        homeFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        homeFrame.setLayout(gb);
+        homeFrame.setSize(1000, 500);
 
-        TimingTarget target = new TimingTargetAdapter() {
-            @Override
-            public void timingEvent(float fraction) {
-                searchBox.setLocation(searchBox.getX(), 600 - (int) (500 * Math.pow(fraction, 0.5)));
-            }
-        };
-        Animator animator = new Animator(1000, target);
-        animator.setResolution(0);
+        homepage = new Homepage();
 
-        setBackground(Color.WHITE);
-        setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 0));
-        setLayout(new GridLayout(1, 2, 0, 10));
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        homeFrame.add(new Header(homeFrame, gbc), gbc);
 
-        JLabel label1 = new JLabel("<html>Cùng ôn luyện các bài thi trắc nghiệm với IntelliQuiz</html>");
-        label1.setFont(Constants.getFont(FontType.QUICKSAND_BOLD).deriveFont(70f));
-        label1.setHorizontalAlignment(JLabel.CENTER);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 962;
+        homeFrame.add(homepage, gbc);
 
-        searchBox.addKeyListener(new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyTyped(KeyEvent ke) {
-                if (!searchBox.getText().isEmpty()) {
-                    leftPanel.remove(label1);
-                    if (!isSearched) {
-                        isSearched = true;
-                        animator.start();
-                    }
-                } else {
-                    isSearched = false;
-                    animator.cancel();
-                }
-            }
-        });
-        searchBox.setBackground(Constants.gray01);
-        searchBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
-        searchBox.setPreferredSize(new Dimension(600, 60));
-        searchBox.setRadius(5);
-
-        leftPanel = new JPanel();
-        leftPanel.setBackground(Color.WHITE);
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.add(Box.createVerticalGlue());
-        leftPanel.add(label1);
-        leftPanel.add(Box.createVerticalStrut(20));
-        leftPanel.add(searchBox);
-        leftPanel.add(Box.createVerticalGlue());
-
-        add(leftPanel);
-        add(new JLabel(new ImageIcon(Constants.imagePath + "homePage.png")));
+        homeFrame.setVisible(true);
     }
 }
