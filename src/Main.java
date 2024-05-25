@@ -1,6 +1,9 @@
 import javax.swing.UIManager;
 
 import Resources.Constants;
+import Resources.Constants.DialogType;
+import Server.DBConnection;
+import View.Dialog;
 import View.Home;
 
 public class Main {
@@ -15,6 +18,9 @@ public class Main {
         UIManager.put("Label.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("TextField.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
 
-        new Home();
+        if (DBConnection.connect())
+            new Home();
+        else
+            new Dialog("Không thể kết nối tới máy chủ, vui lòng thử lại (Mã lỗi: 403)", DialogType.ERROR, null);
     }
 }

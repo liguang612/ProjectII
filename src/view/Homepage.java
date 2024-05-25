@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jdesktop.animation.timing.Animator;
-import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
 import Resources.Constants;
@@ -30,13 +29,12 @@ public class Homepage extends JPanel {
     public Homepage() {
         super();
 
-        TimingTarget target = new TimingTargetAdapter() {
+        Animator animator = new Animator(1000, new TimingTargetAdapter() {
             @Override
             public void timingEvent(float fraction) {
                 searchBox.setLocation(searchBox.getX(), 600 - (int) (500 * Math.pow(fraction, 0.5)));
             }
-        };
-        Animator animator = new Animator(1000, target);
+        });
         animator.setResolution(0);
 
         setBackground(Color.WHITE);
@@ -59,14 +57,21 @@ public class Homepage extends JPanel {
             @Override
             public void keyTyped(KeyEvent ke) {
                 if (!searchBox.getText().isEmpty()) {
-                    leftPanel.remove(label1);
                     if (!isSearched) {
+                        leftPanel.remove(label1);
                         isSearched = true;
                         animator.start();
+
+                        leftPanel.revalidate();
+                        leftPanel.repaint();
                     }
                 } else {
                     isSearched = false;
                     animator.cancel();
+                    leftPanel.add(label1, 1);
+
+                    leftPanel.revalidate();
+                    leftPanel.repaint();
                 }
             }
         });

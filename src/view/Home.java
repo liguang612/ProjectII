@@ -5,11 +5,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
+
 import View.Components.Header;
 
 public class Home {
     private GridBagLayout gb = new GridBagLayout();
     private GridBagConstraints gbc = new GridBagConstraints();
+    private Header header;
     private Homepage homepage;
     private JFrame homeFrame;
 
@@ -29,7 +31,8 @@ public class Home {
         gbc.gridy = 0;
         gbc.weightx = 1;
         gbc.weighty = 0;
-        homeFrame.add(new Header(homeFrame, gbc), gbc);
+        header = new Header(homeFrame, gbc);
+        homeFrame.add(header, gbc);
 
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;

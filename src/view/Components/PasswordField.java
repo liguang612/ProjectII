@@ -6,26 +6,25 @@ import java.awt.Graphics2D;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 
 import Resources.Constants;
 import Resources.Constants.FontType;
 
-public class TextField extends JTextField {
+public class PasswordField extends JPasswordField {
     private Color borderColor;
-    private FontType fontType = FontType.QUICKSAND_REGULAR;
     private ImageIcon icon;
-    private int radius = 24, hintSize = 14;
     private String hint;
+    private int radius = 16;
 
-    public TextField() {
+    public PasswordField() {
         super();
 
         setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
         setOpaque(false);
     }
 
-    public TextField(ImageIcon icon) {
+    public PasswordField(ImageIcon icon) {
         super();
         this.icon = icon;
 
@@ -33,20 +32,18 @@ public class TextField extends JTextField {
         setOpaque(false);
     }
 
-    public TextField(String hint, int hintSize) {
+    public PasswordField(String hint) {
         super();
         this.hint = hint;
-        this.hintSize = hintSize;
 
         setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
         setOpaque(false);
     }
 
-    public TextField(ImageIcon icon, String hint, int hintSize) {
+    public PasswordField(ImageIcon icon, String hint) {
         super();
-        this.icon = icon;
         this.hint = hint;
-        this.hintSize = hintSize;
+        this.icon = icon;
 
         setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
         setOpaque(false);
@@ -54,13 +51,6 @@ public class TextField extends JTextField {
 
     public void setBorderColor(Color borderColor) {
         this.borderColor = borderColor;
-
-        revalidate();
-        repaint();
-    }
-
-    public void setFontType(FontType fontType) {
-        this.fontType = fontType;
 
         revalidate();
         repaint();
@@ -100,17 +90,18 @@ public class TextField extends JTextField {
             graphics.drawLine(0, radius / 2, 0, height - radius / 2);
             graphics.drawLine(radius / 2, height - 1, width - radius / 2, height - 1);
             graphics.drawLine(width - 1, radius / 2, width - 1, height - radius / 2);
+
+            graphics.dispose();
         }
         if (icon != null) {
             g.drawImage(icon.getImage(), width - icon.getIconWidth() - 10, (height - icon.getIconHeight()) / 2, this);
-
         }
         if (hint != null) {
-            if (this.getText().isEmpty()) {
+            if (this.getPassword().length == 0) {
                 Graphics2D g2d = (Graphics2D) g.create();
 
                 g2d.setColor(Color.GRAY);
-                g2d.setFont(Constants.getFont(fontType).deriveFont((float) hintSize));
+                g2d.setFont(Constants.getFont(FontType.QUICKSAND_REGULAR).deriveFont(16f));
                 g2d.drawString(hint, 10, height / 2 + 7);
                 g2d.dispose();
             }
