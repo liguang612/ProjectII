@@ -24,6 +24,10 @@ public class Constants {
         QUICKSAND_BOLD, QUICKSAND_REGULAR, ROBOTO_REGULAR
     }
 
+    public enum ToastType {
+        SUCCESS, WARNING, ERROR
+    }
+
     public static final Font getFont(FontType fontType) {
         try {
             String fontFile = "";

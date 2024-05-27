@@ -6,7 +6,10 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
 
+import Controller.Callback.ToastCallback;
+import Resources.Callback;
 import View.Components.Header;
+import View.Components.Toast;
 
 public class Home {
     private GridBagLayout gb = new GridBagLayout();
@@ -43,5 +46,9 @@ public class Home {
         homeFrame.add(homepage, gbc);
 
         homeFrame.setVisible(true);
+
+        Callback.toastCallback = (message, type) -> {
+            new Toast(homeFrame, message, type);
+        };
     }
 }

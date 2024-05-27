@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class RoundedPanel extends JPanel {
     private int radius;
-    private boolean showBorder;
+    private Color borderColor;
     private int shadowX, shadowY, shadowExtended;
 
     public RoundedPanel(int radius) {
@@ -18,12 +18,19 @@ public class RoundedPanel extends JPanel {
         setOpaque(true);
     }
 
-    public RoundedPanel(int radius, boolean showBorder) {
+    public RoundedPanel(int radius, Color borderColor) {
         super();
         this.radius = radius;
-        this.showBorder = showBorder;
+        this.borderColor = borderColor;
 
         setOpaque(true);
+    }
+
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+
+        revalidate();
+        repaint();
     }
 
     public void setShadow(int x, int y, int shadowExtended) {
@@ -52,8 +59,8 @@ public class RoundedPanel extends JPanel {
         graphics.fillRoundRect(0, 0, width, height, radius, radius);
 
         // Border
-        if (showBorder) {
-            graphics.setColor(Constants.gray02);
+        if (borderColor != null) {
+            graphics.setColor(borderColor);
 
             graphics.drawArc(0, 0, radius, radius, 90, 90);
             graphics.drawArc(width - radius - 1, 0, radius, radius, 0, 90);

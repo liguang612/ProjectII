@@ -2,7 +2,6 @@ package View;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Controller.AuthCtrl;
-import Controller.Callback.UserCallback;
+import Model.Account;
+import Resources.Callback;
 import Resources.Constants;
 import Resources.Constants.FontType;
 import View.Components.Button;
@@ -24,25 +24,25 @@ import View.Components.RoundedPanel;
 import View.Components.TextField;
 
 public class Login extends JPanel {
-    private Button signinButton;
-    private RoundedPanel signInPanel;
+    private Button loginButton;
+    private JLabel notifyLabel;
+    private RoundedPanel loginPanel;
     private PasswordField password;
     private TextField username;
 
-    public Login(UserCallback callback) {
+    public Login() {
         super(new BorderLayout());
 
-        JLabel label1 = new JLabel("Đăng nhập"), label2 = new JLabel("Chào mừng bạn quay trở lại"),
-                label3 = new JLabel("Quên mật khẩu", JLabel.RIGHT);
+        JLabel label1 = new JLabel("Đăng nhập"), label2 = new JLabel("Chào mừng bạn quay trở lại");
         label1.setFont(Constants.getFont(FontType.QUICKSAND_BOLD).deriveFont(37f));
 
         label2.setFont(Constants.getFont(FontType.QUICKSAND_REGULAR).deriveFont(28f));
 
-        label3.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        label3.setFont(Constants.getFont(FontType.QUICKSAND_BOLD).deriveFont(15f));
-        label3.setMaximumSize(new Dimension(378, 20));
-        label3.setMinimumSize(new Dimension(378, 20));
-        label3.setPreferredSize(new Dimension(378, 20));
+        notifyLabel = new JLabel();
+        notifyLabel.setForeground(Color.RED);
+        notifyLabel.setMaximumSize(new Dimension(378, 20));
+        notifyLabel.setMinimumSize(new Dimension(378, 20));
+        notifyLabel.setPreferredSize(new Dimension(378, 20));
 
         password = new PasswordField("Mật khẩu");
         password.setBorderColor(Constants.gray02);
@@ -51,18 +51,18 @@ public class Login extends JPanel {
         password.setPreferredSize(new Dimension(378, 60));
         password.setRadius(8);
 
-        signinButton = new Button("Đăng nhập");
-        signinButton.addActionListener(new ActionListener() {
+        loginButton = new Button("Đăng nhập");
+        loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                login(callback);
+                login();
             }
         });
-        signinButton.setBackground(Constants.blue01);
-        signinButton.setFont(Constants.getFont(FontType.QUICKSAND_BOLD));
-        signinButton.setForeground(Color.WHITE);
-        signinButton.setMaximumSize(new Dimension(378, 60));
-        signinButton.setMinimumSize(new Dimension(378, 60));
-        signinButton.setPreferredSize(new Dimension(378, 60));
+        loginButton.setBackground(Constants.blue01);
+        loginButton.setFont(Constants.getFont(FontType.QUICKSAND_BOLD));
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setMaximumSize(new Dimension(378, 60));
+        loginButton.setMinimumSize(new Dimension(378, 60));
+        loginButton.setPreferredSize(new Dimension(378, 60));
 
         username = new TextField("Tên đăng nhập", 16);
         username.setBorderColor(Constants.gray02);
@@ -71,44 +71,47 @@ public class Login extends JPanel {
         username.setPreferredSize(new Dimension(378, 60));
         username.setRadius(8);
 
-        signInPanel = new RoundedPanel(18, true);
-        signInPanel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-        signInPanel.setBackground(Color.WHITE);
-        signInPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        signInPanel.setLayout(new BoxLayout(signInPanel, BoxLayout.Y_AXIS));
-        signInPanel.setMaximumSize(new Dimension(578, 667));
-        signInPanel.add(new Center(label1, BoxLayout.X_AXIS));
-        signInPanel.add(Box.createVerticalStrut(16));
-        signInPanel.add(new Center(label2, BoxLayout.X_AXIS));
-        signInPanel.add(Box.createVerticalGlue());
-        signInPanel.add(username);
-        signInPanel.add(Box.createVerticalStrut(16));
-        signInPanel.add(password);
-        signInPanel.add(Box.createVerticalStrut(16));
-        signInPanel.add(new Center(label3, BoxLayout.X_AXIS));
-        signInPanel.add(Box.createVerticalStrut(16));
-        signInPanel.add(new Center(signinButton, BoxLayout.X_AXIS));
-        signInPanel.add(Box.createVerticalGlue());
+        loginPanel = new RoundedPanel(18, Constants.gray02);
+        loginPanel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+        loginPanel.setBackground(Color.WHITE);
+        loginPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
+        loginPanel.setMaximumSize(new Dimension(578, 667));
+        loginPanel.add(new Center(label1, BoxLayout.X_AXIS));
+        loginPanel.add(Box.createVerticalStrut(16));
+        loginPanel.add(new Center(label2, BoxLayout.X_AXIS));
+        loginPanel.add(Box.createVerticalGlue());
+        loginPanel.add(username);
+        loginPanel.add(Box.createVerticalStrut(16));
+        loginPanel.add(password);
+        loginPanel.add(Box.createVerticalStrut(16));
+        loginPanel.add(new Center(notifyLabel, BoxLayout.X_AXIS));
+        loginPanel.add(Box.createVerticalStrut(16));
+        loginPanel.add(new Center(loginButton, BoxLayout.X_AXIS));
+        loginPanel.add(Box.createVerticalGlue());
 
         setBackground(Constants.neutral01);
-        setLayout(new BorderLayout());
 
         add(Box.createHorizontalStrut(467), BorderLayout.WEST);
         add(Box.createHorizontalStrut(467), BorderLayout.EAST);
         add(Box.createVerticalStrut(153), BorderLayout.NORTH);
         add(Box.createVerticalStrut(153), BorderLayout.SOUTH);
-        add(signInPanel, BorderLayout.CENTER);
+        add(loginPanel, BorderLayout.CENTER);
     }
 
-    public void login(UserCallback callback) {
+    public void login() {
         if (password.getPassword().toString().isEmpty() || username.getText().isEmpty()) {
-
+            notifyLabel.setText("Tài khoản và mật khẩu không được để trống");
             return;
         }
 
-        int myUser = AuthCtrl.login(username.getText(), new String(password.getPassword()));
+        Account user = AuthCtrl.login(username.getText(), new String(password.getPassword()));
 
-        callback.callbackUser(myUser);
+        if (user != null) {
+            Callback.userCallback.callbackUser(user);
+        } else {
+            notifyLabel.setText("Sai tài khoản hoặc mật khẩu");
+        }
     }
 
 }

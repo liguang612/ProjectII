@@ -14,40 +14,46 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Controller.Callback.ToastCallback;
 import Controller.Callback.UserCallback;
+import Model.Account;
+import Resources.Callback;
 import Resources.Constants;
 import Resources.Tools;
 import Resources.Constants.DialogType;
 import View.Dialog;
 import View.Homepage;
 import View.Login;
+import View.SignUp;
 
 public class Header extends JPanel {
     private Button account, home, login, signup;
     private int isSelected = 0;
     private JPanel leftPanel, rightPanel;
-    private int id;
+    private Account user;
 
     public Header(JFrame parentFrame, GridBagConstraints gbc) {
         super(new BorderLayout());
 
-        UserCallback callback = (id) -> {
-            this.id = id;
+        Callback.userCallback = (user) -> {
+            this.user = user;
 
-            if (id > 0) {
-                rightPanel.remove(login);
-                rightPanel.remove(signup);
-                rightPanel.add(new JLabel("" + id));
-                rightPanel.revalidate();
-                rightPanel.repaint();
+            isSelected = 0;
+            changeUI();
 
-                parentFrame.getContentPane().remove(1);
-                parentFrame.getContentPane().add(new Homepage());
-                parentFrame.revalidate();
-                parentFrame.repaint();
-            } else {
-                new Dialog("Sai tài khoản hoặc mật khẩu", DialogType.ERROR, parentFrame);
-            }
+            rightPanel.remove(login);
+            rightPanel.remove(signup);
+            rightPanel.add(new JLabel(user.getName(),
+                    Tools.resize(user.getImage(), (int) (getHeight() * 0.6), (int) (getHeight() * 0.6)),
+                    JLabel.CENTER));
+            rightPanel.revalidate();
+            rightPanel.repaint();
+
+            parentFrame.getContentPane().remove(1);
+            parentFrame.getContentPane().add(new Homepage(), gbc);
+            parentFrame.revalidate();
+            parentFrame.repaint();
+
         };
 
         account = new Button("Tài khoản");
@@ -71,7 +77,7 @@ public class Header extends JPanel {
         login.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 parentFrame.getContentPane().remove(1);
-                parentFrame.getContentPane().add(new Login(callback), gbc);
+                parentFrame.getContentPane().add(new Login(), gbc);
 
                 isSelected = -1;
                 changeUI();
@@ -83,6 +89,18 @@ public class Header extends JPanel {
         login.setMargin(new Insets(12, 24, 12, 24));
 
         signup = new Button("Đăng ký");
+        signup.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                parentFrame.getContentPane().remove(1);
+                parentFrame.getContentPane().add(new SignUp(), gbc);
+
+                isSelected = -1;
+                changeUI();
+
+                parentFrame.revalidate();
+                parentFrame.repaint();
+            }
+        });
         signup.setBackground(Constants.blue01);
         signup.setForeground(Color.WHITE);
         signup.setMargin(new Insets(12, 24, 12, 24));
@@ -114,9 +132,5 @@ public class Header extends JPanel {
 
         revalidate();
         repaint();
-    }
-
-    void login(JFrame parentFrame, GridBagConstraints gbc) {
-
     }
 }

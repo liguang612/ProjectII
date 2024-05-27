@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 import javax.swing.UIManager;
 
 import Resources.Constants;
@@ -16,6 +18,9 @@ public class Main {
 
         UIManager.put("Button.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("Label.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
+        UIManager.put("Panel.background", Color.WHITE);
+        UIManager.put("RadioButton.background", Color.WHITE);
+        UIManager.put("RadioButton.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("TextField.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
 
         if (DBConnection.connect())
