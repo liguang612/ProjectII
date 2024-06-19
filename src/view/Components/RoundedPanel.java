@@ -2,8 +2,6 @@ package View.Components;
 
 import javax.swing.*;
 
-import Resources.Constants;
-
 import java.awt.*;
 
 public class RoundedPanel extends JPanel {

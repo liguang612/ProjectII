@@ -37,7 +37,6 @@ public class Homepage extends JPanel {
         });
         animator.setResolution(0);
 
-        setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 0));
         setLayout(new GridLayout(1, 2, 0, 10));
 

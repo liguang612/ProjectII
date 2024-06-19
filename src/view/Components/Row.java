@@ -7,7 +7,7 @@ public class Row extends JPanel {
     public Row(int gap, Component... children) {
         super();
 
-        int maxHeight = 0;
+        int maxHeight = 0, tmp;
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
@@ -15,10 +15,12 @@ public class Row extends JPanel {
             add(children[i]);
             add(Box.createHorizontalStrut(gap));
 
-            int tmp = ((int) children[i].getPreferredSize().getHeight());
+            tmp = ((int) children[i].getMaximumSize().getHeight());
             maxHeight = maxHeight < tmp ? tmp : maxHeight;
         }
         add(children[children.length - 1]);
+        tmp = ((int) children[children.length - 1].getMaximumSize().getHeight());
+        maxHeight = maxHeight < tmp ? tmp : maxHeight;
 
         setMaximumSize(new Dimension(((int) getMaximumSize().getWidth()), maxHeight));
     }

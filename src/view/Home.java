@@ -6,7 +6,6 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
 
-import Controller.Callback.ToastCallback;
 import Resources.Callback;
 import View.Components.Header;
 import View.Components.Toast;

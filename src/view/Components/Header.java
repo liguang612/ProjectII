@@ -14,26 +14,41 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Controller.Callback.ToastCallback;
-import Controller.Callback.UserCallback;
 import Model.Account;
 import Resources.Callback;
 import Resources.Constants;
 import Resources.Tools;
-import Resources.Constants.DialogType;
-import View.Dialog;
 import View.Homepage;
 import View.Login;
 import View.SignUp;
+import View.Exam.AddExam;
+import View.Exam.ManageExam;
 
 public class Header extends JPanel {
-    private Button account, home, login, signup;
+    private Button manageExam, home, login, signup;
     private int isSelected = 0;
+    private JLabel account;
     private JPanel leftPanel, rightPanel;
     private Account user;
 
     public Header(JFrame parentFrame, GridBagConstraints gbc) {
         super(new BorderLayout());
+
+        Callback.createExamCallback = () -> {
+            parentFrame.getContentPane().remove(1);
+            parentFrame.getContentPane().add(new AddExam(), gbc);
+
+            parentFrame.revalidate();
+            parentFrame.repaint();
+        };
+
+        Callback.manageExamCallback = () -> {
+            parentFrame.getContentPane().remove(1);
+            parentFrame.getContentPane().add(new ManageExam(), gbc);
+
+            parentFrame.revalidate();
+            parentFrame.repaint();
+        };
 
         Callback.userCallback = (user) -> {
             this.user = user;
@@ -41,11 +56,13 @@ public class Header extends JPanel {
             isSelected = 0;
             changeUI();
 
+            account = new JLabel(user.getName(),
+                    Tools.resize(user.getImage(), (int) (getHeight() * 0.6), (int) (getHeight() * 0.6)), JLabel.CENTER);
             rightPanel.remove(login);
             rightPanel.remove(signup);
-            rightPanel.add(new JLabel(user.getName(),
-                    Tools.resize(user.getImage(), (int) (getHeight() * 0.6), (int) (getHeight() * 0.6)),
-                    JLabel.CENTER));
+            if (user.getRole() == 1)
+                rightPanel.add(manageExam);
+            rightPanel.add(account);
             rightPanel.revalidate();
             rightPanel.repaint();
 
@@ -53,10 +70,7 @@ public class Header extends JPanel {
             parentFrame.getContentPane().add(new Homepage(), gbc);
             parentFrame.revalidate();
             parentFrame.repaint();
-
         };
-
-        account = new Button("Tài khoản");
 
         home = new Button("Trang chủ");
         home.addActionListener(new ActionListener() {
@@ -87,6 +101,21 @@ public class Header extends JPanel {
             }
         });
         login.setMargin(new Insets(12, 24, 12, 24));
+
+        manageExam = new Button("Quản lý đề thi");
+        manageExam.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                parentFrame.getContentPane().remove(1);
+                parentFrame.getContentPane().add(new ManageExam(), gbc);
+
+                isSelected = 1;
+                changeUI();
+
+                parentFrame.revalidate();
+                parentFrame.repaint();
+            }
+        });
+        manageExam.setBackground(Color.WHITE);
 
         signup = new Button("Đăng ký");
         signup.addActionListener(new ActionListener() {
@@ -126,6 +155,10 @@ public class Header extends JPanel {
     void changeUI() {
         if (isSelected == 0) {
             home.setBorder(BorderFactory.createMatteBorder(0, 0, 4, 0, Constants.blue01));
+            manageExam.setBorder(null);
+        } else if (isSelected == 1) {
+            home.setBorder(null);
+            manageExam.setBorder(BorderFactory.createMatteBorder(0, 0, 4, 0, Constants.blue01));
         } else {
             home.setBorder(null);
         }

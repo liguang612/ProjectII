@@ -16,6 +16,8 @@ public class Constants {
 
     public static final Color neutral01 = new Color(0xFAFAFC);
 
+    public static final Color red01 = new Color(0xFF2020);
+
     public enum DialogType {
         SUCCESS, WARNING, ERROR
     }

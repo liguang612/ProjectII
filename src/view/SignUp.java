@@ -24,7 +24,7 @@ public class SignUp extends JPanel {
     private JLabel avatar, notifyLabel;
     private JRadioButton student, teacher;
     private JScrollPane scrollPane;
-    private JSpinner dob;
+    private Spinner dob;
     private PasswordField password;
     private RoundedPanel signUpPanel;
     private TextField _class, email, name, phoneNumber, school, username;
@@ -64,11 +64,9 @@ public class SignUp extends JPanel {
         Date initialDate = calendar.getTime();
         Date endDate = calendar.getTime();
 
-        dob = new JSpinner(new SpinnerDateModel(initialDate, startDate, endDate, Calendar.DATE));
+        dob = new Spinner(new SpinnerDateModel(initialDate, startDate, endDate, Calendar.DATE));
         dob.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
         dob.setEditor(new JSpinner.DateEditor(dob, "dd/MM/yyyy"));
-        dob.setFont(Constants.getFont(FontType.QUICKSAND_REGULAR));
-        dob.setMinimumSize(new Dimension(0, 60));
         dob.setMaximumSize(new Dimension(295, 60));
 
         email = new TextField("Email (không bắt buộc)", 16);
@@ -195,7 +193,7 @@ public class SignUp extends JPanel {
             String __class = _class.getText().isBlank() ? null : _class.getText();
 
             int status = AuthCtrl.signUp(new Account(
-                    ALLBITS, name.getText(),
+                    student.isSelected() ? 0 : 1, name.getText(),
                     Tools.toSqlDate(dob.getValue().toString()),
                     _phoneNumber,
                     _email,

@@ -7,6 +7,7 @@ public class Column extends JPanel {
     public Column(int gap, Component... children) {
         super();
 
+        setAlignmentX(JPanel.CENTER_ALIGNMENT);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         for (int i = 0; i < children.length - 1; i++) {

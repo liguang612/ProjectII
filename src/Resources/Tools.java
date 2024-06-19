@@ -53,6 +53,20 @@ public class Tools {
         return imageInByte;
     }
 
+    public static ImageIcon pickImage() {
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Tệp hình ảnh", ImageIO.getReaderFileSuffixes());
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showOpenDialog(null);
+
+        fileChooser.setFileFilter(filter);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            return new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath());
+        }
+
+        return null;
+    }
+
     public static ImageIcon pickImage(int height, int width) {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Tệp hình ảnh", ImageIO.getReaderFileSuffixes());
         JFileChooser fileChooser = new JFileChooser();

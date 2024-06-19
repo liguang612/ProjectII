@@ -4,6 +4,7 @@ import javax.swing.UIManager;
 
 import Resources.Constants;
 import Resources.Constants.DialogType;
+import Resources.Constants.FontType;
 import Server.DBConnection;
 import View.Dialog;
 import View.Home;
@@ -21,6 +22,8 @@ public class Main {
         UIManager.put("Panel.background", Color.WHITE);
         UIManager.put("RadioButton.background", Color.WHITE);
         UIManager.put("RadioButton.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
+        UIManager.put("Spinner.font", Constants.getFont(FontType.QUICKSAND_REGULAR));
+        UIManager.put("TextArea.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("TextField.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
 
         if (DBConnection.connect())
