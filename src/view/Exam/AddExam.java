@@ -46,6 +46,11 @@ public class AddExam extends JPanel {
         confirm.setBackground(Constants.blue01);
         confirm.setForeground(Color.WHITE);
         confirm.setMargin(new Insets(12, 24, 12, 24));
+        confirm.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+
+            }
+        });
 
         Date startDate = calendar.getTime();
         Date initialDate = startDate;
@@ -138,5 +143,9 @@ public class AddExam extends JPanel {
     private void changeTotalQuestions() {
         total.setText(
                 "Tổng: " + ((int) easies.getValue() + (int) mediums.getValue() + (int) hards.getValue()));
+    }
+
+    void create() {
+
     }
 }
