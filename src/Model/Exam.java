@@ -20,8 +20,20 @@ public class Exam {
   public Exam() {
   }
 
-  public Exam(String name, String description, Date openTime, Date closeTime, String subject, int duration,
-      boolean canRepeat, boolean canReviewed, float total, int easies, int mediums, int hards, int teacherId) {
+  public Exam(
+      String name,
+      String description,
+      Date openTime,
+      Date closeTime,
+      String subject,
+      int duration,
+      boolean canRepeat,
+      boolean canReviewed,
+      float total,
+      int easies,
+      int mediums,
+      int hards,
+      int teacherId) {
     this.name = name;
     this.description = description;
     this.openTime = openTime;

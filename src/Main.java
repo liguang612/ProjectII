@@ -18,6 +18,8 @@ public class Main {
         }
 
         UIManager.put("Button.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
+        UIManager.put("CheckBox.background", Color.WHITE);
+        UIManager.put("CheckBox.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("Label.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("Panel.background", Color.WHITE);
         UIManager.put("RadioButton.background", Color.WHITE);

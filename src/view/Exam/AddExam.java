@@ -8,9 +8,13 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import Controller.ExamCtrl;
+import Model.Account;
+import Model.Exam;
 import Resources.Callback;
 import Resources.Constants;
 import Resources.Constants.FontType;
+import Resources.Constants.ToastType;
 import View.Components.Button;
 import View.Components.Column;
 import View.Components.Row;
@@ -24,7 +28,7 @@ public class AddExam extends JPanel {
     JCheckBox repeat, reviewed;
     JLabel total;
 
-    public AddExam() {
+    public AddExam(Account user) {
         super();
 
         setBorder(BorderFactory.createEmptyBorder(0, 40, 20, 40));
@@ -48,7 +52,7 @@ public class AddExam extends JPanel {
         confirm.setMargin(new Insets(12, 24, 12, 24));
         confirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-
+                create(user.getId());
             }
         });
 
@@ -60,10 +64,12 @@ public class AddExam extends JPanel {
         close = new Spinner(new SpinnerDateModel(initialDate, startDate, endDate, Calendar.MINUTE));
         close.setBorderColor(Constants.gray02);
         close.setEditor(new Spinner.DateEditor(close, "dd/MM/yyyy HH:mm"));
+        close.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
 
         open = new Spinner(new SpinnerDateModel(initialDate, startDate, endDate, Calendar.MINUTE));
         open.setBorderColor(Constants.gray02);
         open.setEditor(new Spinner.DateEditor(open, "dd/MM/yyyy HH:mm"));
+        open.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
 
         description = new TextField("Mô tả đề thi", 16);
         description.setBorderColor(Constants.gray02);
@@ -111,11 +117,26 @@ public class AddExam extends JPanel {
         label2.setFont(Constants.getFont(FontType.ROBOTO_REGULAR).deriveFont(30f));
         label3.setFont(Constants.getFont(FontType.ROBOTO_REGULAR).deriveFont(30f));
 
+        repeat = new JCheckBox("Cho phép làm lại");
+
+        reviewed = new JCheckBox("Cho phép xem đáp án");
+
+        subject = new TextField("Môn học", 16);
+        subject.setBorderColor(Constants.gray02);
+        subject.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+
         panel.add(new Column(16,
                 new Row(16, label2),
                 name,
                 description,
+                subject,
+                new Row(16, repeat, reviewed),
                 Box.createVerticalStrut(16),
+                new Row(16, new JLabel("Thời gian mở   "),
+                        open,
+                        Box.createHorizontalStrut(16),
+                        new JLabel("Thời gian đóng   "),
+                        close),
                 new Row(0, new JLabel("Thời lượng làm bài   "), duration, new JLabel(" phút"),
                         Box.createHorizontalGlue()),
                 Box.createVerticalStrut(16),
@@ -125,7 +146,8 @@ public class AddExam extends JPanel {
                         new JLabel("Trung bình:"), mediums,
                         new JLabel("Khó:"), hards),
                 new Row(0, total),
-                new Row(16, cancel, confirm)));
+                new Row(16, cancel, confirm),
+                Box.createVerticalGlue()));
 
         JScrollPane scrollPane = new JScrollPane(rightPanel);
         scrollPane.setBorder(null);
@@ -145,7 +167,30 @@ public class AddExam extends JPanel {
                 "Tổng: " + ((int) easies.getValue() + (int) mediums.getValue() + (int) hards.getValue()));
     }
 
-    void create() {
+    void create(int userId) {
+        System.out.println(Integer.parseInt(duration.getValue().toString()));
 
+        boolean state = ExamCtrl.createExam(new Exam(
+                name.getText(),
+                description.getText(),
+                ((Date) open.getValue()),
+                ((Date) close.getValue()),
+                subject.getText(),
+                Integer.parseInt(duration.getValue().toString()),
+                repeat.isSelected(),
+                reviewed.isSelected(),
+                (float) 0.0,
+                Integer.parseInt(easies.getValue().toString()),
+                Integer.parseInt(mediums.getValue().toString()),
+                Integer.parseInt(hards.getValue().toString()),
+                userId));
+
+        if (state) {
+            Callback.toastCallback.callbackToast("Tạo đề thi thành công",
+                    ToastType.SUCCESS);
+        } else {
+            Callback.toastCallback.callbackToast("Tạo đề thi thất bại",
+                    ToastType.ERROR);
+        }
     }
 }
