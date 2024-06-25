@@ -11,10 +11,12 @@ public class Exam {
   private int duration;
   private boolean canRepeat;
   private boolean canReviewed;
-  private float total;
   private int easies;
+  private float easyPts;
   private int mediums;
+  private float mediumPts;
   private int hards;
+  private float hardPts;
   private int teacherId;
 
   public Exam() {
@@ -29,10 +31,9 @@ public class Exam {
       int duration,
       boolean canRepeat,
       boolean canReviewed,
-      float total,
-      int easies,
-      int mediums,
-      int hards,
+      int easies, float easyPts,
+      int mediums, float mediumPts,
+      int hards, float hardPts,
       int teacherId) {
     this.name = name;
     this.description = description;
@@ -42,10 +43,12 @@ public class Exam {
     this.duration = duration;
     this.canRepeat = canRepeat;
     this.canReviewed = canReviewed;
-    this.total = total;
     this.easies = easies;
+    this.easyPts = easyPts;
     this.mediums = mediums;
+    this.mediumPts = mediumPts;
     this.hards = hards;
+    this.hardPts = hardPts;
     this.teacherId = teacherId;
   }
 
@@ -81,20 +84,28 @@ public class Exam {
     return canReviewed;
   }
 
-  public float getTotal() {
-    return total;
-  }
-
   public int getEasies() {
     return easies;
+  }
+
+  public float getMediumPts() {
+    return mediumPts;
   }
 
   public int getMediums() {
     return mediums;
   }
 
+  public float getHardPts() {
+    return hardPts;
+  }
+
   public int getHards() {
     return hards;
+  }
+
+  public float getEasyPts() {
+    return easyPts;
   }
 
   public int getTeacherId() {
@@ -131,10 +142,6 @@ public class Exam {
 
   public void setCanReviewed(boolean canReviewed) {
     this.canReviewed = canReviewed;
-  }
-
-  public void setTotal(float total) {
-    this.total = total;
   }
 
   public void setEasies(int easies) {

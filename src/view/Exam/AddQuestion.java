@@ -3,10 +3,17 @@ package View.Exam;
 import java.awt.*;
 import java.awt.event.*;
 
+import java.util.ArrayList;
+
 import javax.swing.*;
 
+import Controller.ExamCtrl;
+import Model.Choice;
+import Model.Question;
+import Resources.Callback;
 import Resources.Constants;
 import Resources.Tools;
+import Resources.Constants.ToastType;
 import View.Components.Button;
 import View.Components.Column;
 import View.Components.RoundedPanel;
@@ -17,7 +24,6 @@ import View.Components.TextField;
 public class AddQuestion extends RoundedPanel {
     private Button add, addChoice, delete;
     private TextArea ask;
-    private TextField mark;
     private JLabel media;
     private JRadioButton easy, hard, medium;
 
@@ -85,7 +91,7 @@ public class AddQuestion extends RoundedPanel {
         media.setForeground(Color.BLUE);
         media.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent me) {
-                ImageIcon ii = Tools.pickImage(getHeight() / 2, getWidth() / 2);
+                ImageIcon ii = Tools.pickImage();
 
                 if (ii != null) {
                     media.setText(null);
@@ -94,18 +100,37 @@ public class AddQuestion extends RoundedPanel {
             }
         });
 
-        mark = new TextField("Điểm", 16);
-        mark.setBorderColor(Constants.gray02);
-
         add(new Column(8,
                 ask,
-                new Row(16, media),
-                mark,
+                media,
                 new Row(16, easy, medium, hard)));
         add(new Row(0, addChoice));
         add(Box.createVerticalStrut(16));
         add(Box.createVerticalStrut(16));
         add(new Row(0, add));
+    }
+
+    public void createQuestion(int examId) {
+        int questionId = ExamCtrl.createQuestion(new Question(
+                ask.getText(),
+                (ImageIcon) media.getIcon(),
+                easy.isSelected() ? 0 : medium.isSelected() ? 1 : 2,
+                examId));
+
+        if (questionId != -1) {
+            ArrayList<Choice> choices = new ArrayList<>();
+
+            int sz = getComponentCount() - 2;
+
+            for (int i = 3; i < sz; i++) {
+                ChoiceSetting cs = (ChoiceSetting) getComponent(i);
+                choices.add(cs.getChoice(questionId));
+            }
+
+            ExamCtrl.createChoices(choices);
+        } else {
+            Callback.toastCallback.callbackToast("Có lỗi khi tạo câu hỏi " + ask.getText(), ToastType.ERROR);
+        }
     }
 
     class ChoiceSetting extends RoundedPanel {
@@ -157,8 +182,8 @@ public class AddQuestion extends RoundedPanel {
                     delete));
         }
 
-        public boolean isCorrect() {
-            return isCorrect.isSelected();
-        };
+        public Choice getChoice(int questionId) {
+            return new Choice(text.getText(), (ImageIcon) media.getIcon(), isCorrect.isSelected(), questionId);
+        }
     }
 }
