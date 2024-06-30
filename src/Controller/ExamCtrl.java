@@ -1,6 +1,7 @@
 package Controller;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import Model.Choice;
 import Model.Exam;
@@ -19,5 +20,25 @@ public class ExamCtrl {
 
   public static int createQuestion(Question question) {
     return ExamQuery.createQuestion(question);
+  }
+
+  public static boolean deleteChoice(int choiceId) {
+    return ExamQuery.deleteChoice(choiceId);
+  }
+
+  public static boolean deleteExam(int examId) {
+    return ExamQuery.deleteExam(examId);
+  }
+
+  public static boolean deleteQuestion(int questionId) {
+    return ExamQuery.deleteQuestion(questionId);
+  }
+
+  public static ArrayList<Exam> getAllExam(int userId) {
+    return ExamQuery.getAllExam(userId);
+  }
+
+  public static Map<Question, ArrayList<Choice>> getAllQuestion(int examId) {
+    return ExamQuery.getAllQuestion(examId);
   }
 }

@@ -9,8 +9,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import Controller.ExamCtrl;
-import Model.Account;
+import Model.Choice;
 import Model.Exam;
+import Model.Question;
 import Resources.Callback;
 import Resources.Constants;
 import Resources.Constants.FontType;
@@ -21,7 +22,7 @@ import View.Components.Row;
 import View.Components.Spinner;
 import View.Components.TextField;
 
-public class AddExam extends JPanel {
+public class EditExam extends JPanel {
     Button cancel, confirm;
     TextField name, description, subject;
     Spinner open, close, easies, easyPts, hards, hardPts, mediums, mediumPts, duration;
@@ -29,7 +30,7 @@ public class AddExam extends JPanel {
     JLabel total, totalPts;
     JPanel rightPanel = new JPanel();
 
-    public AddExam(Account user) {
+    public EditExam(Exam exam) {
         super();
 
         setBorder(BorderFactory.createEmptyBorder(0, 40, 20, 40));
@@ -49,27 +50,25 @@ public class AddExam extends JPanel {
         cancel.setForeground(Color.BLACK);
         cancel.setMargin(new Insets(12, 24, 12, 24));
 
-        confirm = new Button("Tạo");
+        confirm = new Button("Sửa");
         confirm.setBackground(Constants.blue01);
         confirm.setForeground(Color.WHITE);
         confirm.setMargin(new Insets(12, 24, 12, 24));
         confirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                create(user.getId(), rightPanel.getComponents());
+                // create(exam.(), rightPanel.getComponents());
             }
         });
 
-        Date startDate = calendar.getTime();
-        Date initialDate = startDate;
         calendar.add(Calendar.YEAR, 100);
         Date endDate = calendar.getTime();
 
-        close = new Spinner(new SpinnerDateModel(initialDate, startDate, endDate, Calendar.MINUTE));
+        close = new Spinner(new SpinnerDateModel(exam.getCloseTime(), exam.getCloseTime(), endDate, Calendar.MINUTE));
         close.setBorderColor(Constants.gray02);
         close.setEditor(new Spinner.DateEditor(close, "dd/MM/yyyy HH:mm"));
         close.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
 
-        open = new Spinner(new SpinnerDateModel(initialDate, startDate, endDate, Calendar.MINUTE));
+        open = new Spinner(new SpinnerDateModel(exam.getOpenTime(), exam.getOpenTime(), endDate, Calendar.MINUTE));
         open.setBorderColor(Constants.gray02);
         open.setEditor(new Spinner.DateEditor(open, "dd/MM/yyyy HH:mm"));
         open.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
@@ -77,20 +76,21 @@ public class AddExam extends JPanel {
         description = new TextField("Mô tả đề thi", 16);
         description.setBorderColor(Constants.gray02);
         description.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        description.setText(exam.getDescription());
 
-        duration = new Spinner(new SpinnerNumberModel(60, 1, 1440, 5));
+        duration = new Spinner(new SpinnerNumberModel(exam.getDuration(), 1, 1440, 5));
         duration.setMinimumSize(new Dimension(200, 40));
         duration.setMaximumSize(new Dimension(200, 40));
         duration.setPreferredSize(new Dimension(200, 40));
 
-        easies = new Spinner(new SpinnerNumberModel(20, 1, 1440, 1));
+        easies = new Spinner(new SpinnerNumberModel(exam.getEasies(), 1, 1440, 1));
         easies.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 changeTotalQuestions();
             }
         });
         easies.setMaximumSize(new Dimension(200, 40));
-        easyPts = new Spinner(new SpinnerNumberModel(0.25, 0.0, 100, 0.05));
+        easyPts = new Spinner(new SpinnerNumberModel(exam.getEasyPts(), 0.0, 100, 0.05));
         easyPts.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 changeTotalQuestions();
@@ -98,14 +98,14 @@ public class AddExam extends JPanel {
         });
         easyPts.setMaximumSize(new Dimension(200, 40));
 
-        hards = new Spinner(new SpinnerNumberModel(10, 1, 1440, 1));
+        hards = new Spinner(new SpinnerNumberModel(exam.getHards(), 1, 1440, 1));
         hards.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 changeTotalQuestions();
             }
         });
         hards.setMaximumSize(new Dimension(200, 40));
-        hardPts = new Spinner(new SpinnerNumberModel(0.25, 0.0, 100, 0.05));
+        hardPts = new Spinner(new SpinnerNumberModel(exam.getHardPts(), 0.0, 100, 0.05));
         hardPts.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 changeTotalQuestions();
@@ -113,14 +113,14 @@ public class AddExam extends JPanel {
         });
         hardPts.setMaximumSize(new Dimension(200, 40));
 
-        mediums = new Spinner(new SpinnerNumberModel(10, 1, 1440, 1));
+        mediums = new Spinner(new SpinnerNumberModel(exam.getMediums(), 1, 1440, 1));
         mediums.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 changeTotalQuestions();
             }
         });
         mediums.setMaximumSize(new Dimension(200, 40));
-        mediumPts = new Spinner(new SpinnerNumberModel(0.25, 0.0, 100, 0.05));
+        mediumPts = new Spinner(new SpinnerNumberModel(exam.getMediumPts(), 0.0, 100, 0.05));
         mediumPts.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent ce) {
                 changeTotalQuestions();
@@ -131,6 +131,7 @@ public class AddExam extends JPanel {
         name = new TextField("Tên đề thi", 16);
         name.setBorderColor(Constants.gray02);
         name.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        name.setText(exam.getName());
 
         total = new JLabel(
                 "Tổng: " + ((int) easies.getValue() + (int) mediums.getValue() + (int) hards.getValue()));
@@ -139,19 +140,22 @@ public class AddExam extends JPanel {
                         + (int) mediums.getValue() * (double) mediumPts.getValue()
                         + (int) hards.getValue() * (double) hardPts.getValue()));
 
-        JLabel label1 = new JLabel("Tạo đề thi"), label2 = new JLabel("Thông tin chung"),
+        JLabel label1 = new JLabel("Sửa đề thi"), label2 = new JLabel("Thông tin chung"),
                 label3 = new JLabel("Kho câu hỏi");
         label1.setFont(Constants.getFont(FontType.QUICKSAND_BOLD).deriveFont(70f));
         label2.setFont(Constants.getFont(FontType.ROBOTO_REGULAR).deriveFont(30f));
         label3.setFont(Constants.getFont(FontType.ROBOTO_REGULAR).deriveFont(30f));
 
         repeat = new JCheckBox("Cho phép làm lại");
+        repeat.setSelected(exam.getCanRepeat());
 
         reviewed = new JCheckBox("Cho phép xem đáp án");
+        reviewed.setSelected(exam.getCanReviewed());
 
         subject = new TextField("Môn học", 16);
         subject.setBorderColor(Constants.gray02);
         subject.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        subject.setText(exam.getSubject());
 
         panel.add(new Column(16,
                 new Row(16, label2),
@@ -182,6 +186,9 @@ public class AddExam extends JPanel {
                 new Row(16, cancel, confirm),
                 Box.createVerticalGlue()));
 
+        // QUESTION BANK
+        Map<Question, ArrayList<Choice>> questionBank = ExamCtrl.getAllQuestion(exam.getId());
+
         JScrollPane scrollPane = new JScrollPane(rightPanel);
         scrollPane.setBorder(null);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -189,6 +196,9 @@ public class AddExam extends JPanel {
 
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.add(new Row(0, label3));
+        for (Map.Entry<Question, ArrayList<Choice>> entry : questionBank.entrySet()) {
+
+        }
         rightPanel.add(new AddQuestion(rightPanel));
 
         add(label1, BorderLayout.NORTH);
@@ -248,8 +258,6 @@ public class AddExam extends JPanel {
 
                 aq.createQuestion(examId);
             }
-
-            Callback.manageExamCallback.manageExam();
         } else {
             Callback.toastCallback.callbackToast("Tạo đề thi thất bại", ToastType.ERROR);
             Callback.manageExamCallback.manageExam();

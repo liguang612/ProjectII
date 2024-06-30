@@ -3,6 +3,7 @@ package Model;
 import java.util.Date;
 
 public class Exam {
+  private int id;
   private String name;
   private String description;
   private Date openTime;
@@ -50,6 +51,42 @@ public class Exam {
     this.hards = hards;
     this.hardPts = hardPts;
     this.teacherId = teacherId;
+  }
+
+  public Exam(
+      int id,
+      String name,
+      String description,
+      Date openTime,
+      Date closeTime,
+      String subject,
+      int duration,
+      boolean canRepeat,
+      boolean canReviewed,
+      int easies, float easyPts,
+      int mediums, float mediumPts,
+      int hards, float hardPts,
+      int teacherId) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.openTime = openTime;
+    this.closeTime = closeTime;
+    this.subject = subject;
+    this.duration = duration;
+    this.canRepeat = canRepeat;
+    this.canReviewed = canReviewed;
+    this.easies = easies;
+    this.easyPts = easyPts;
+    this.mediums = mediums;
+    this.mediumPts = mediumPts;
+    this.hards = hards;
+    this.hardPts = hardPts;
+    this.teacherId = teacherId;
+  }
+
+  public int getId() {
+    return id;
   }
 
   public String getName() {

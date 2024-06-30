@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Model.Account;
+import Model.Exam;
 import Resources.Callback;
 import Resources.Constants;
 import Resources.Tools;
@@ -22,6 +23,7 @@ import View.Homepage;
 import View.Login;
 import View.SignUp;
 import View.Exam.AddExam;
+import View.Exam.EditExam;
 import View.Exam.ManageExam;
 
 public class Header extends JPanel {
@@ -42,9 +44,17 @@ public class Header extends JPanel {
             parentFrame.repaint();
         };
 
+        Callback.editExamCallback = (Exam exam) -> {
+            parentFrame.getContentPane().remove(1);
+            parentFrame.getContentPane().add(new EditExam(exam), gbc);
+
+            parentFrame.revalidate();
+            parentFrame.repaint();
+        };
+
         Callback.manageExamCallback = () -> {
             parentFrame.getContentPane().remove(1);
-            parentFrame.getContentPane().add(new ManageExam(), gbc);
+            parentFrame.getContentPane().add(new ManageExam(user), gbc);
 
             parentFrame.revalidate();
             parentFrame.repaint();
@@ -106,7 +116,7 @@ public class Header extends JPanel {
         manageExam.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 parentFrame.getContentPane().remove(1);
-                parentFrame.getContentPane().add(new ManageExam(), gbc);
+                parentFrame.getContentPane().add(new ManageExam(user), gbc);
 
                 isSelected = 1;
                 changeUI();

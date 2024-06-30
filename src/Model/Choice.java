@@ -3,6 +3,7 @@ package Model;
 import javax.swing.ImageIcon;
 
 public class Choice {
+  private int id;
   private String text;
   private ImageIcon media;
   private boolean isCorrect;
@@ -16,6 +17,18 @@ public class Choice {
     this.media = media;
     this.isCorrect = isCorrect;
     this.questionId = questionId;
+  }
+
+  public Choice(int id, String text, ImageIcon media, boolean isCorrect, int questionId) {
+    this.id = id;
+    this.text = text;
+    this.media = media;
+    this.isCorrect = isCorrect;
+    this.questionId = questionId;
+  }
+
+  public int getId() {
+    return id;
   }
 
   public String getText() {

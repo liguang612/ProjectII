@@ -19,6 +19,14 @@ public class Question {
     this.examId = examId;
   }
 
+  public Question(int id, String ask, ImageIcon media, int level, int examId) {
+    this.id = id;
+    this.ask = ask;
+    this.media = media;
+    this.level = level;
+    this.examId = examId;
+  }
+
   public int getId() {
     return id;
   }
