@@ -252,7 +252,6 @@ public class AddExam extends JPanel {
             Callback.manageExamCallback.manageExam();
         } else {
             Callback.toastCallback.callbackToast("Tạo đề thi thất bại", ToastType.ERROR);
-            Callback.manageExamCallback.manageExam();
         }
     }
 }

@@ -34,6 +34,10 @@ public class ExamCtrl {
     return ExamQuery.deleteQuestion(questionId);
   }
 
+  public static boolean editExam(Exam exam) {
+    return ExamQuery.editExam(exam);
+  }
+
   public static ArrayList<Exam> getAllExam(int userId) {
     return ExamQuery.getAllExam(userId);
   }

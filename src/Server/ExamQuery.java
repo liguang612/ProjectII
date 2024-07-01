@@ -209,6 +209,39 @@ public class ExamQuery {
     return false;
   }
 
+  public static boolean editExam(Exam exam) {
+    if (DBConnection.database != null) {
+      try {
+        PreparedStatement preparedStatement = DBConnection.database.prepareStatement(
+            "UPDATE EXAM SET [NAME] = ?, [DESCRIPTION] = ?, OPENTIME = ?, CLOSETIME = ?, SUBJECT = ?, DURATION = ?, CANREPEAT = ?, CANREVIEWED = ?, EASIES = ?, EASYPOINT = ?, MEDIUMS = ?, MEDIUMPOINT = ?, HARDS = ?, HARDPOINT = ?  WHERE ID = ?");
+
+        preparedStatement.setString(1, exam.getName());
+        preparedStatement.setString(2, exam.getDescription());
+        preparedStatement.setTimestamp(3, new Timestamp(exam.getOpenTime().getTime()));
+        preparedStatement.setTimestamp(4, new Timestamp(exam.getCloseTime().getTime()));
+        preparedStatement.setString(5, exam.getSubject());
+        preparedStatement.setInt(6, exam.getDuration());
+        preparedStatement.setBoolean(7, exam.getCanRepeat());
+        preparedStatement.setBoolean(8, exam.getCanReviewed());
+        preparedStatement.setInt(9, exam.getEasies());
+        preparedStatement.setFloat(10, exam.getEasyPts());
+        preparedStatement.setInt(11, exam.getMediums());
+        preparedStatement.setFloat(12, exam.getMediumPts());
+        preparedStatement.setInt(13, exam.getHards());
+        preparedStatement.setFloat(14, exam.getHardPts());
+        preparedStatement.setInt(15, exam.getId());
+
+        preparedStatement.executeUpdate();
+
+        return true;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    return false;
+  }
+
   public static ArrayList<Choice> getAllChoice(int questionId) {
     ArrayList<Choice> choices = new ArrayList<>();
 

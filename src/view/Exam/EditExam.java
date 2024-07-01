@@ -56,7 +56,7 @@ public class EditExam extends JPanel {
         confirm.setMargin(new Insets(12, 24, 12, 24));
         confirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                // create(exam.(), rightPanel.getComponents());
+                edit(exam.getId(), rightPanel.getComponents());
             }
         });
 
@@ -197,7 +197,7 @@ public class EditExam extends JPanel {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.add(new Row(0, label3));
         for (Map.Entry<Question, ArrayList<Choice>> entry : questionBank.entrySet()) {
-
+            rightPanel.add(new EditQuestion(rightPanel, entry.getKey(), entry.getValue()));
         }
         rightPanel.add(new AddQuestion(rightPanel));
 
@@ -214,7 +214,7 @@ public class EditExam extends JPanel {
                         + (int) hards.getValue() * (double) hardPts.getValue()));
     }
 
-    void create(int userId, Component[] questions) {
+    void edit(int examId, Component[] questions) {
         if (name.getText().isBlank()) {
             Callback.toastCallback.callbackToast("Tên đề thi không được rỗng", ToastType.ERROR);
             return;
@@ -231,7 +231,8 @@ public class EditExam extends JPanel {
             return;
         }
 
-        int examId = ExamCtrl.createExam(new Exam(
+        boolean status = ExamCtrl.editExam(new Exam(
+                examId,
                 name.getText(),
                 description.getText(),
                 ((Date) open.getValue()),
@@ -246,21 +247,21 @@ public class EditExam extends JPanel {
                 Float.parseFloat(mediumPts.getValue().toString()),
                 Integer.parseInt(hards.getValue().toString()),
                 Float.parseFloat(hardPts.getValue().toString()),
-                userId));
+                0));
 
-        if (examId != -1) {
-            Callback.toastCallback.callbackToast("Tạo đề thi thành công", ToastType.SUCCESS);
+        if (status) {
+            Callback.toastCallback.callbackToast("Sửa đề thi thành công", ToastType.SUCCESS);
 
-            int sz = rightPanel.getComponentCount() - 1;
+            // int sz = rightPanel.getComponentCount() - 1;
 
-            for (int i = 1; i < sz; i++) {
-                AddQuestion aq = (AddQuestion) rightPanel.getComponent(i);
+            // for (int i = 1; i < sz; i++) {
+            // AddQuestion aq = (AddQuestion) rightPanel.getComponent(i);
 
-                aq.createQuestion(examId);
-            }
-        } else {
-            Callback.toastCallback.callbackToast("Tạo đề thi thất bại", ToastType.ERROR);
+            // aq.createQuestion(examId);
+            // }
             Callback.manageExamCallback.manageExam();
+        } else {
+            Callback.toastCallback.callbackToast("Sửa đề thi thất bại", ToastType.ERROR);
         }
     }
 }
