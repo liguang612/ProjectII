@@ -14,7 +14,7 @@ import Model.Question;
 import Resources.Tools;
 
 public class ExamQuery {
-  public static boolean createChoices(ArrayList<Choice> choices, int questionId) {
+  public static boolean createChoices(ArrayList<Choice> choices) {
     if (DBConnection.database != null) {
       try {
         PreparedStatement preparedStatement = DBConnection.database
@@ -164,6 +164,10 @@ public class ExamQuery {
   public static boolean deleteQuestion(int questionId) {
     if (DBConnection.database != null) {
       try {
+        if (!deleteChoiceOfQuestion(questionId)) {
+          return false;
+        }
+
         PreparedStatement preparedStatement = DBConnection.database
             .prepareStatement("DELETE FROM QUESTION WHERE ID = ?");
 
@@ -209,6 +213,33 @@ public class ExamQuery {
     return false;
   }
 
+  public static boolean editChoice(ArrayList<Choice> choices) {
+    if (DBConnection.database != null) {
+
+      try {
+        PreparedStatement preparedStatement = DBConnection.database
+            .prepareStatement("UPDATE CHOICE SET TEXT = ?, MEDIA = ?, ISCORRECT = ? WHERE ID = ?");
+
+        for (Choice choice : choices) {
+          preparedStatement.setString(1, choice.getText());
+          preparedStatement.setBytes(2, choice.getMedia() == null ? null : Tools.imageToBytes(choice.getMedia()));
+          preparedStatement.setBoolean(3, choice.getIsCorrect());
+          preparedStatement.setInt(4, choice.getId());
+
+          preparedStatement.addBatch();
+        }
+
+        preparedStatement.executeBatch();
+
+        return true;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    return false;
+  }
+
   public static boolean editExam(Exam exam) {
     if (DBConnection.database != null) {
       try {
@@ -230,6 +261,28 @@ public class ExamQuery {
         preparedStatement.setInt(13, exam.getHards());
         preparedStatement.setFloat(14, exam.getHardPts());
         preparedStatement.setInt(15, exam.getId());
+
+        preparedStatement.executeUpdate();
+
+        return true;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    return false;
+  }
+
+  public static boolean editQuestion(Question question) {
+    if (DBConnection.database != null) {
+      try {
+        PreparedStatement preparedStatement = DBConnection.database
+            .prepareStatement("UPDATE QUESTION SET ASK = ?, MEDIA = ?, [LEVEL] = ? WHERE ID = ?");
+
+        preparedStatement.setString(1, question.getAsk());
+        preparedStatement.setBytes(2, question.getMedia() == null ? null : Tools.imageToBytes(question.getMedia()));
+        preparedStatement.setInt(3, question.getLevel());
+        preparedStatement.setInt(4, question.getId());
 
         preparedStatement.executeUpdate();
 

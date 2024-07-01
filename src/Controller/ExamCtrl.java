@@ -11,7 +11,7 @@ import Server.ExamQuery;
 
 public class ExamCtrl {
   public static boolean createChoices(ArrayList<Choice> choices) {
-    return ExamQuery.createChoices(choices, 0);
+    return ExamQuery.createChoices(choices);
   }
 
   public static int createExam(Exam exam) {
@@ -34,8 +34,26 @@ public class ExamCtrl {
     return ExamQuery.deleteQuestion(questionId);
   }
 
+  public static boolean editChoices(ArrayList<Choice> choices) {
+    ArrayList<Choice> newChoices = new ArrayList<>(), oldChoices = new ArrayList<>();
+
+    for (Choice choice : choices) {
+      if (choice.getId() == 0) {
+        newChoices.add(choice);
+      } else {
+        oldChoices.add(choice);
+      }
+    }
+
+    return createChoices(newChoices) && ExamQuery.editChoice(oldChoices);
+  }
+
   public static boolean editExam(Exam exam) {
     return ExamQuery.editExam(exam);
+  }
+
+  public static boolean editQuestion(Question question) {
+    return ExamQuery.editQuestion(question);
   }
 
   public static ArrayList<Exam> getAllExam(int userId) {

@@ -46,7 +46,7 @@ public class Header extends JPanel {
 
         Callback.editExamCallback = (Exam exam) -> {
             parentFrame.getContentPane().remove(1);
-            parentFrame.getContentPane().add(new EditExam(exam), gbc);
+            parentFrame.getContentPane().add(new EditExam(exam, parentFrame), gbc);
 
             parentFrame.revalidate();
             parentFrame.repaint();

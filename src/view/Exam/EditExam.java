@@ -30,7 +30,7 @@ public class EditExam extends JPanel {
     JLabel total, totalPts;
     JPanel rightPanel = new JPanel();
 
-    public EditExam(Exam exam) {
+    public EditExam(Exam exam, JFrame prevFrame) {
         super();
 
         setBorder(BorderFactory.createEmptyBorder(0, 40, 20, 40));
@@ -197,7 +197,7 @@ public class EditExam extends JPanel {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.add(new Row(0, label3));
         for (Map.Entry<Question, ArrayList<Choice>> entry : questionBank.entrySet()) {
-            rightPanel.add(new EditQuestion(rightPanel, entry.getKey(), entry.getValue()));
+            rightPanel.add(new EditQuestion(prevFrame, rightPanel, entry.getKey(), entry.getValue()));
         }
         rightPanel.add(new AddQuestion(rightPanel));
 
@@ -252,13 +252,16 @@ public class EditExam extends JPanel {
         if (status) {
             Callback.toastCallback.callbackToast("Sửa đề thi thành công", ToastType.SUCCESS);
 
-            // int sz = rightPanel.getComponentCount() - 1;
+            int sz = rightPanel.getComponentCount() - 1;
 
-            // for (int i = 1; i < sz; i++) {
-            // AddQuestion aq = (AddQuestion) rightPanel.getComponent(i);
+            for (int i = 1; i < sz; i++) {
+                Component eq = rightPanel.getComponent(i);
 
-            // aq.createQuestion(examId);
-            // }
+                if (eq instanceof AddQuestion)
+                    ((AddQuestion) eq).createQuestion(examId);
+                else
+                    ((EditQuestion) eq).editQuestion();
+            }
             Callback.manageExamCallback.manageExam();
         } else {
             Callback.toastCallback.callbackToast("Sửa đề thi thất bại", ToastType.ERROR);

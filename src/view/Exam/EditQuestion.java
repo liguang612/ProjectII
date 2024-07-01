@@ -16,6 +16,7 @@ import Resources.Tools;
 import Resources.Constants.ToastType;
 import View.Components.Button;
 import View.Components.Column;
+import View.Components.Dialog;
 import View.Components.RoundedPanel;
 import View.Components.Row;
 import View.Components.TextArea;
@@ -26,9 +27,12 @@ public class EditQuestion extends RoundedPanel {
     private TextArea ask;
     private JLabel media;
     private JRadioButton easy, hard, medium;
+    public Question question;
 
-    public EditQuestion(JPanel prevPanel, Question question, ArrayList<Choice> choices) {
+    public EditQuestion(JFrame parentFrame, JPanel prevPanel, Question question, ArrayList<Choice> choices) {
         super(16);
+
+        this.question = question;
 
         ButtonGroup bg = new ButtonGroup();
 
@@ -40,7 +44,7 @@ public class EditQuestion extends RoundedPanel {
         addChoice.setCursor(new Cursor(Cursor.HAND_CURSOR));
         addChoice.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                add(new ChoiceSetting(EditQuestion.this, null), getComponentCount() - 2);
+                add(new ChoiceSetting(null, EditQuestion.this, null), getComponentCount() - 2);
 
                 revalidate();
                 repaint();
@@ -56,10 +60,19 @@ public class EditQuestion extends RoundedPanel {
         delete.setForeground(Color.WHITE);
         delete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                prevPanel.remove(EditQuestion.this);
+                new Dialog(parentFrame, "Bạn có chắc muốn xóa vĩnh viễn câu hỏi này không?",
+                        x -> {
+                            if (ExamCtrl.deleteQuestion(question.getId())) {
+                                prevPanel.remove(EditQuestion.this);
 
-                prevPanel.revalidate();
-                prevPanel.repaint();
+                                prevPanel.revalidate();
+                                prevPanel.repaint();
+
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        });
             }
         });
 
@@ -100,7 +113,7 @@ public class EditQuestion extends RoundedPanel {
         add(new Row(0, addChoice));
         add(Box.createVerticalStrut(16));
         for (Choice choice : choices) {
-            add(new ChoiceSetting(this, choice));
+            add(new ChoiceSetting(parentFrame, this, choice));
         }
         add(Box.createVerticalStrut(16));
         add(new Row(0, delete));
@@ -129,14 +142,42 @@ public class EditQuestion extends RoundedPanel {
         }
     }
 
+    public void editQuestion() {
+        boolean status = ExamCtrl.editQuestion(new Question(
+                question.getId(),
+                ask.getText(),
+                (ImageIcon) media.getIcon(),
+                easy.isSelected() ? 0 : medium.isSelected() ? 1 : 2,
+                question.getExamId()));
+
+        if (status) {
+            ArrayList<Choice> choices = new ArrayList<>();
+
+            int sz = getComponentCount() - 2;
+
+            for (int i = 3; i < sz; i++) {
+                ChoiceSetting cs = (ChoiceSetting) getComponent(i);
+                choices.add(cs.getChoice(question.getId()));
+            }
+
+            ExamCtrl.editChoices(choices);
+        } else {
+            Callback.toastCallback.callbackToast("Có lỗi khi tạo câu hỏi " + ask.getText(), ToastType.ERROR);
+        }
+    }
+
     class ChoiceSetting extends RoundedPanel {
         private Button delete;
         private JCheckBox isCorrect;
         private JLabel media;
         private TextField text;
 
-        ChoiceSetting(RoundedPanel parent, Choice choice) {
+        private Choice choice;
+
+        ChoiceSetting(JFrame parentFrame, RoundedPanel parent, Choice choice) {
             super(16);
+
+            this.choice = choice;
 
             setBackground(Constants.gray01);
             setLayout(new GridLayout(1, 1));
@@ -157,7 +198,7 @@ public class EditQuestion extends RoundedPanel {
 
             isCorrect = new JCheckBox();
             isCorrect.setBackground(Color.WHITE);
-            isCorrect.setSelected(choice.getIsCorrect());
+            isCorrect.setSelected(choice == null ? false : choice.getIsCorrect());
 
             media = new JLabel("Thêm hình ảnh");
             media.setBackground(Constants.gray02);
@@ -180,7 +221,7 @@ public class EditQuestion extends RoundedPanel {
 
             text = new TextField("Đáp án", 14);
             text.setBorderColor(Constants.gray02);
-            text.setText(choice.getText());
+            text.setText(choice == null ? "" : choice.getText());
 
             add(new Row(10,
                     isCorrect,
@@ -189,7 +230,9 @@ public class EditQuestion extends RoundedPanel {
         }
 
         public Choice getChoice(int questionId) {
-            return new Choice(text.getText(), (ImageIcon) media.getIcon(), isCorrect.isSelected(), questionId);
+            return new Choice(choice == null ? 0 : choice.getId(), text.getText(), (ImageIcon) media.getIcon(),
+                    isCorrect.isSelected(),
+                    questionId);
         }
     }
 }
