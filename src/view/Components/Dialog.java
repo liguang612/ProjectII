@@ -20,6 +20,7 @@ public class Dialog extends JDialog {
 
     Button cancel = new Button("Hủy"), submit = new Button("OK");
 
+    setBackground(Color.WHITE);
     setLayout(new GridLayout(1, 1, 24, 16));
     setLocation(prevFrame.getX() + prevFrame.getWidth() / 2 - 375, prevFrame.getY() + prevFrame.getHeight() / 2 - 100);
     setSize(750, 200);

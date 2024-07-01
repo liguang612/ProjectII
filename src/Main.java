@@ -21,7 +21,9 @@ public class Main {
         UIManager.put("CheckBox.background", Color.WHITE);
         UIManager.put("CheckBox.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("Label.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
+        UIManager.put("MenuItem.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("Panel.background", Color.WHITE);
+        UIManager.put("PopupMenu.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("RadioButton.background", Color.WHITE);
         UIManager.put("RadioButton.font", Constants.getFont(Constants.FontType.QUICKSAND_REGULAR));
         UIManager.put("Spinner.font", Constants.getFont(FontType.QUICKSAND_REGULAR));
