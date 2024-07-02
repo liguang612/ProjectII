@@ -45,20 +45,24 @@ public class ViewExam extends JPanel {
     wrapper.setAlignmentX(JPanel.CENTER_ALIGNMENT);
     wrapper.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     wrapper.setLayout(new GridLayout(1, 1));
-    wrapper.setMaximumSize(new Dimension(578, 667));
-    wrapper.setMinimumSize(new Dimension(578, 667));
-    wrapper.add(new Column(12, name,
+    wrapper.setMaximumSize(new Dimension(578, 467));
+    wrapper.setMinimumSize(new Dimension(578, 467));
+    wrapper.add(new Column(12, JPanel.LEFT_ALIGNMENT, name,
         new JSeparator(),
-        new JLabel(exam.getDescription()),
-        new JLabel("<html>Thời gian: <b>" + exam.getDuration() + "</b></html>",
-            new ImageIcon(Constants.imagePath + "ic_time.png"), JLabel.LEFT),
+        new Row(0, new JLabel(exam.getDescription()), Box.createHorizontalGlue()),
+        new Row(0, new JLabel("<html>Thời gian: <b>" + exam.getDuration() + "</b></html>",
+            new ImageIcon(Constants.imagePath + "ic_time.png"), JLabel.LEFT), Box.createHorizontalGlue()),
         new Row(16,
             new JLabel(
                 "<html>Số câu hỏi: <b>" + (exam.getEasies() + exam.getMediums() + exam.getHards()) + "</b></html>",
                 new ImageIcon(Constants.imagePath + "ic_question.png"), JLabel.LEFT),
             new JLabel("<html>Tổng điểm: <b>" + exam.getTotal() + "</b></html>",
                 new ImageIcon(Constants.imagePath + "ic_medal.png"), JLabel.LEFT)),
-        new JLabel("Môn học", new ImageIcon(Constants.imagePath + "ic_subject.png"), JLabel.LEFT),
+        new Row(0,
+            new JLabel("Môn học: " + exam.getSubject(), new ImageIcon(Constants.imagePath + "ic_subject.png"),
+                JLabel.LEFT),
+            Box.createHorizontalGlue()),
+        Box.createVerticalGlue(),
         new JSeparator(),
         exam.getCloseTime().after(calendar.getTime()) && exam.getOpenTime().before(calendar.getTime())
             ? new Row(16, Box.createHorizontalGlue(), cancel, confirm)

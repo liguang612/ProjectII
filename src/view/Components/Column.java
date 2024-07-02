@@ -17,4 +17,18 @@ public class Column extends JPanel {
         }
         add(children[children.length - 1]);
     }
+
+    public Column(int gap, float crossAlignment, Component... children) {
+        super();
+
+        setAlignmentX(crossAlignment);
+        setOpaque(false);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        for (int i = 0; i < children.length - 1; i++) {
+            add(children[i]);
+            add(Box.createVerticalStrut(gap));
+        }
+        add(children[children.length - 1]);
+    }
 }
