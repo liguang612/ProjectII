@@ -23,6 +23,7 @@ import Controller.AuthCtrl;
 import Controller.ExamCtrl;
 import Model.Account;
 import Model.Exam;
+import Resources.Callback;
 import Resources.Constants;
 import Resources.Constants.FontType;
 import View.Components.Button;
@@ -77,6 +78,9 @@ public class Homepage extends JPanel {
 
                         view.setBackground(Constants.blue01);
                         view.setForeground(Color.WHITE);
+                        view.addActionListener(e -> {
+                            Callback.viewExamCallback.viewExam(exam);
+                        });
 
                         tmp2Panel.setOpaque(false);
                         tmp2Panel.setLayout(new GridLayout(1, 1, 12, 12));

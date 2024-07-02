@@ -25,6 +25,7 @@ import Model.Exam;
 import Resources.Callback;
 import Resources.Constants;
 import Resources.Tools;
+import Resources.Constants.ToastType;
 import View.Homepage;
 import View.Account.CheckPassword;
 import View.Account.Information;
@@ -78,6 +79,16 @@ public class Header extends JPanel {
 
             parentFrame.revalidate();
             parentFrame.repaint();
+        };
+
+        Callback.viewExamCallback = (exam) -> {
+            if (user == null) {
+                Callback.toastCallback.callbackToast("Bạn chưa đăng nhập!", ToastType.WARNING);
+                return;
+            } else if (user.getRole() == 1) {
+                Callback.toastCallback.callbackToast("Bạn không phải là HSSV!", ToastType.WARNING);
+                return;
+            }
         };
 
         Callback.userCallback = (user) -> {

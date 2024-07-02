@@ -6,6 +6,7 @@ import Controller.Callback.InformationCallback;
 import Controller.Callback.ManageExamCallback;
 import Controller.Callback.ToastCallback;
 import Controller.Callback.UserCallback;
+import Controller.Callback.ViewExamCallback;
 
 public class Callback {
     public static CreateExamCallback createExamCallback;
@@ -14,4 +15,5 @@ public class Callback {
     public static ManageExamCallback manageExamCallback;
     public static ToastCallback toastCallback;
     public static UserCallback userCallback;
+    public static ViewExamCallback viewExamCallback;
 }
