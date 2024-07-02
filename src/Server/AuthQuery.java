@@ -71,6 +71,34 @@ public class AuthQuery {
         return false;
     }
 
+    public static Account getUser(int userId) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database
+                        .prepareStatement("SELECT * FROM ACCOUNT WHERE ID = ?");
+
+                preparedStatement.setInt(1, userId);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    return new Account(resultSet.getInt(1),
+                            resultSet.getInt(2),
+                            resultSet.getString(3),
+                            resultSet.getDate(4),
+                            resultSet.getString(5),
+                            resultSet.getString(6),
+                            resultSet.getString(7),
+                            resultSet.getString(8),
+                            Tools.BytesToImage(resultSet.getBytes(9)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
     public static Account login(String username, String password) {
         if (DBConnection.database != null) {
             try {

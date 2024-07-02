@@ -13,8 +13,10 @@ public class Constants {
 
     public static final Color gray01 = new Color(0xE7E7E7);
     public static final Color gray02 = new Color(0, 0, 0, 0.3f);
+    public static final Color gray03 = new Color(0, 0, 0, 0.1f);
 
     public static final Color neutral01 = new Color(0xFAFAFC);
+    public static final Color neutral02 = new Color(0xF0F0FC);
 
     public static final Color red01 = new Color(0xFF2020);
 

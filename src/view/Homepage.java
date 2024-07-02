@@ -19,10 +19,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.ScrollPaneConstants;
 
+import Controller.AuthCtrl;
 import Controller.ExamCtrl;
+import Model.Account;
 import Model.Exam;
 import Resources.Constants;
 import Resources.Constants.FontType;
+import View.Components.Button;
 import View.Components.Column;
 import View.Components.RoundedPanel;
 import View.Components.Row;
@@ -49,7 +52,7 @@ public class Homepage extends JPanel {
         searchBox.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent ke) {
-                for (int i = 3; i < leftPanel.getComponentCount() - 1; i++) {
+                for (int i = 0; i < leftPanel.getComponentCount(); i++) {
                     if (leftPanel.getComponent(i) instanceof RoundedPanel) {
                         leftPanel.remove(i);
                     }
@@ -63,19 +66,28 @@ public class Homepage extends JPanel {
                     ArrayList<Exam> exams = ExamCtrl.searchExam(searchBox.getText());
                     for (Exam exam : exams) {
                         RoundedPanel tmpPanel = new RoundedPanel(16), tmp2Panel = new RoundedPanel(0);
-                        tmpPanel.setBackground(Color.RED);
+                        tmpPanel.setBackground(Constants.neutral02);
                         tmpPanel.setLayout(new GridLayout(1, 1));
 
+                        Account account = AuthCtrl.getUser(exam.getTeacherId());
+                        Button view = new Button("Xem");
                         JLabel name = new JLabel(exam.getName());
+
                         name.setFont(name.getFont().deriveFont(Font.BOLD).deriveFont(20.0f));
 
+                        view.setBackground(Constants.blue01);
+                        view.setForeground(Color.WHITE);
+
+                        tmp2Panel.setOpaque(false);
                         tmp2Panel.setLayout(new GridLayout(1, 1, 12, 12));
                         tmp2Panel.add(new JLabel("<html><nobr><i>Số câu</i><br><b>"
                                 + (exam.getEasies() + exam.getMediums() + exam.getHards()) +
                                 "</b></nobr></html>"));
 
                         tmpPanel.add(new Row(16,
+                                Box.createHorizontalStrut(8),
                                 new Column(12,
+                                        Box.createHorizontalStrut(8),
                                         new Row(0, name, Box.createHorizontalGlue()),
                                         new Row(0, new JLabel(exam.getDescription()), Box.createHorizontalGlue()),
                                         new JSeparator(JSeparator.HORIZONTAL),
@@ -87,9 +99,15 @@ public class Homepage extends JPanel {
                                                         "<html>-<b><i>" + simpleDateFormat.format(exam.getCloseTime())
                                                                 + "</i></b></html>")),
                                         Box.createVerticalGlue(),
-                                        new Row(16, Box.createHorizontalGlue())),
+                                        new Row(16,
+                                                new JLabel("<html>GV: <b>" + account.getName() + "</b> - "
+                                                        + account.getSchool() + "</html>"),
+                                                Box.createHorizontalGlue(),
+                                                view),
+                                        Box.createHorizontalStrut(8)),
                                 new Column(0, Box.createVerticalGlue(), tmp2Panel,
-                                        Box.createVerticalGlue())));
+                                        Box.createVerticalGlue()),
+                                Box.createHorizontalStrut(8)));
 
                         leftPanel.add(tmpPanel, leftPanel.getComponentCount() - 1);
                     }

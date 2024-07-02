@@ -391,7 +391,8 @@ public class ExamQuery {
     if (DBConnection.database != null) {
       try {
         PreparedStatement preparedStatement = DBConnection.database
-            .prepareStatement("SELECT * FROM EXAM WHERE [NAME] LIKE ? OR [DESCRIPTION] LIKE ? OR [SUBJECT] LIKE ?");
+            .prepareStatement(
+                "SELECT * FROM EXAM WHERE [NAME] LIKE ? OR [DESCRIPTION] LIKE ? OR [SUBJECT] LIKE ?");
         preparedStatement.setString(1, "%" + keyword + "%");
         preparedStatement.setString(2, "%" + keyword + "%");
         preparedStatement.setString(3, "%" + keyword + "%");

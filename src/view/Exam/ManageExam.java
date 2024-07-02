@@ -48,7 +48,6 @@ public class ManageExam extends JPanel {
 
         for (Exam exam : ExamCtrl.getAllExam(user.getId())) {
             RoundedPanel tmpPanel = new RoundedPanel(16), tmp2Panel = new RoundedPanel(0);
-            tmpPanel.setBackground(Constants.gray02);
             tmpPanel.setBorderColor(Constants.gray02);
             tmpPanel.setLayout(new GridLayout(1, 1));
 
@@ -81,7 +80,9 @@ public class ManageExam extends JPanel {
                     + (exam.getEasies() + exam.getMediums() + exam.getHards()) + "</b></nobr></html>"));
 
             tmpPanel.add(new Row(16,
+                    Box.createHorizontalStrut(12),
                     new Column(12,
+                            Box.createVerticalStrut(12),
                             new Row(0, name, Box.createHorizontalGlue()),
                             new Row(0, new JLabel(exam.getDescription()), Box.createHorizontalGlue()),
                             new JSeparator(JSeparator.HORIZONTAL),
@@ -91,8 +92,10 @@ public class ManageExam extends JPanel {
                                     new JLabel("<html>-<b><i>" + simpleDateFormat.format(exam.getCloseTime())
                                             + "</i></b></html>")),
                             Box.createVerticalGlue(),
-                            new Row(16, Box.createHorizontalGlue(), edit, delete)),
-                    new Column(0, Box.createVerticalGlue(), tmp2Panel, Box.createVerticalGlue())));
+                            new Row(16, Box.createHorizontalGlue(), edit, delete),
+                            Box.createVerticalStrut(12)),
+                    new Column(0, Box.createVerticalGlue(), tmp2Panel, Box.createVerticalGlue()),
+                    Box.createHorizontalStrut(12)));
 
             panel.add(tmpPanel);
         }

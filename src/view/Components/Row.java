@@ -9,6 +9,7 @@ public class Row extends JPanel {
 
         int maxHeight = 0, tmp;
 
+        setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
         for (int i = 0; i < children.length - 1; i++) {

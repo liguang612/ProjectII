@@ -16,6 +16,10 @@ public class AuthCtrl {
         return AuthQuery.checkPassword(userId, password);
     }
 
+    public static Account getUser(int userId) {
+        return AuthQuery.getUser(userId);
+    }
+
     public static Account login(String username, String password) {
         return AuthQuery.login(username, password);
     }

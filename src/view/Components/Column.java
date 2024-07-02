@@ -8,7 +8,7 @@ public class Column extends JPanel {
         super();
 
         setAlignmentX(JPanel.CENTER_ALIGNMENT);
-        setBackground(new Color(0, 0, 0, 0));
+        setOpaque(false);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         for (int i = 0; i < children.length - 1; i++) {
