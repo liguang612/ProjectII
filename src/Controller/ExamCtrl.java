@@ -63,4 +63,8 @@ public class ExamCtrl {
   public static Map<Question, ArrayList<Choice>> getAllQuestion(int examId) {
     return ExamQuery.getAllQuestion(examId);
   }
+
+  public static ArrayList<Exam> searchExam(String keyword) {
+    return ExamQuery.searchExam(keyword);
+  }
 }

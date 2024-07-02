@@ -385,4 +385,41 @@ public class ExamQuery {
 
     return questions;
   }
+
+  public static ArrayList<Exam> searchExam(String keyword) {
+    ArrayList<Exam> exams = new ArrayList<>();
+    if (DBConnection.database != null) {
+      try {
+        PreparedStatement preparedStatement = DBConnection.database
+            .prepareStatement("SELECT * FROM EXAM WHERE [NAME] LIKE ? OR [DESCRIPTION] LIKE ? OR [SUBJECT] LIKE ?");
+        preparedStatement.setString(1, "%" + keyword + "%");
+        preparedStatement.setString(2, "%" + keyword + "%");
+        preparedStatement.setString(3, "%" + keyword + "%");
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+          exams.add(new Exam(resultSet.getInt(1),
+              resultSet.getString(2),
+              resultSet.getString(3),
+              resultSet.getTimestamp(4),
+              resultSet.getTimestamp(5),
+              resultSet.getString(6),
+              resultSet.getInt(7),
+              resultSet.getBoolean(8),
+              resultSet.getBoolean(9),
+              resultSet.getInt(10),
+              resultSet.getFloat(11),
+              resultSet.getInt(12),
+              resultSet.getFloat(13),
+              resultSet.getInt(14),
+              resultSet.getFloat(15),
+              resultSet.getInt(16)));
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    return exams;
+  }
 }
