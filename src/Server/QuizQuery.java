@@ -13,14 +13,17 @@ public class QuizQuery {
     if (DBConnection.database != null) {
       try {
         PreparedStatement preparedStatement = DBConnection.database
-            .prepareStatement("SELECT * FROM QUESION WHERE EXAM = ?");
+            .prepareStatement("SELECT * FROM QUESTION WHERE EXAM = ?");
 
         preparedStatement.setInt(1, examId);
 
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
-          questions.add(new Question(resultSet.getInt(1), resultSet.getString(2),
-              Tools.BytesToImage(resultSet.getBytes(3)), resultSet.getInt(4), examId));
+          questions.add(new Question(resultSet.getInt(1),
+              resultSet.getString(2),
+              resultSet.getBytes(3) == null ? null : Tools.BytesToImage(resultSet.getBytes(3)),
+              resultSet.getInt(4),
+              examId));
         }
       } catch (Exception e) {
         e.printStackTrace();

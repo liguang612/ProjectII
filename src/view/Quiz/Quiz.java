@@ -10,9 +10,11 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 
 import Controller.QuizCtrl;
 import Model.Exam;
@@ -84,6 +86,8 @@ public class Quiz extends JFrame {
         new Row(0, Box.createHorizontalGlue(), submit, Box.createHorizontalGlue())));
 
     questions = QuizCtrl.generateQuiz(exam);
+
+    rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
     scrollPane.setBorder(null);
     scrollPane.getVerticalScrollBar().setUnitIncrement(20);
     for (int i = 0; i < questions.size(); i++) {
@@ -93,6 +97,7 @@ public class Quiz extends JFrame {
 
         return true;
       }));
+      rightPanel.add(new JSeparator());
     }
 
     gbc.anchor = GridBagConstraints.CENTER;
