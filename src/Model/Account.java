@@ -76,4 +76,32 @@ public class Account {
     public ImageIcon getImage() {
         return image;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public void setClass(String Class) {
+        this.Class = Class;
+    }
+
+    public void setImage(ImageIcon image) {
+        this.image = image;
+    }
 }

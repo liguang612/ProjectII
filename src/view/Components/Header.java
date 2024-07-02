@@ -95,9 +95,9 @@ public class Header extends JPanel {
                 }
             });
 
-            rightPanel.remove(login);
-            rightPanel.remove(signup);
+            rightPanel.removeAll();
 
+            rightPanel.add(home);
             if (user.getRole() == 1)
                 rightPanel.add(manageExam);
             rightPanel.add(account);

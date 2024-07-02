@@ -185,23 +185,33 @@ public class Information extends JPanel {
     } else {
       notifyLabel.setText("");
 
+      String _password = new String(password.getPassword());
+
+      if (!_password.isBlank()) {
+        if (AuthCtrl.changePassword(user.getId(), _password)) {
+          Callback.toastCallback.callbackToast("Đổi mật khẩu thành công!", ToastType.SUCCESS);
+        } else {
+          Callback.toastCallback.callbackToast("Đổi mật khẩu thất bại!", ToastType.SUCCESS);
+        }
+      }
+
       String _phoneNumber = phoneNumber.getText().isBlank() ? null : phoneNumber.getText();
       String _email = email.getText().isBlank() ? null : email.getText();
       String __class = _class.getText().isBlank() ? null : _class.getText();
 
-      boolean status = AuthCtrl.changeInfomation(new Account(
-          user.getId(),
-          0,
-          name.getText(),
-          Tools.toSqlDate(dob.getValue().toString()),
-          _phoneNumber,
-          _email,
-          school.getText(),
-          __class,
-          (ImageIcon) avatar.getIcon()));
+      user.setName(name.getText());
+      user.setDob(Tools.toSqlDate(dob.getValue().toString()));
+      user.setPhoneNumber(_phoneNumber);
+      user.setEmail(_email);
+      user.setSchool(school.getText());
+      user.setClass(__class);
+      user.setImage((ImageIcon) avatar.getIcon());
+
+      boolean status = AuthCtrl.changeInfomation(user);
 
       if (status) {
         Callback.toastCallback.callbackToast("Thay đổi thông tin thành công!", ToastType.SUCCESS);
+        Callback.userCallback.callbackUser(user);
       } else {
         Callback.toastCallback.callbackToast("Có lỗi xảy ra", ToastType.ERROR);
       }

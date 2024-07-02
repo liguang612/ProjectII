@@ -8,6 +8,10 @@ public class AuthCtrl {
         return AuthQuery.changeInformation(account);
     }
 
+    public static boolean changePassword(int userId, String password) {
+        return AuthQuery.changePassword(userId, password);
+    }
+
     public static boolean checkPassword(int userId, String password) {
         return AuthQuery.checkPassword(userId, password);
     }

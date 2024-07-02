@@ -33,6 +33,24 @@ public class AuthQuery {
         return false;
     }
 
+    public static boolean changePassword(int userId, String password) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database
+                        .prepareStatement("UPDATE [LOGIN] SET [PASSWORD] = ? WHERE ID = ?");
+
+                preparedStatement.setString(1, password);
+                preparedStatement.setInt(2, userId);
+
+                return preparedStatement.executeUpdate() > 0;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
+    }
+
     public static boolean checkPassword(int userId, String password) {
         if (DBConnection.database != null) {
             try {
@@ -43,7 +61,6 @@ public class AuthQuery {
 
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-                    System.out.println(resultSet.getString(1));
                     return password.equals(resultSet.getString(1));
                 }
             } catch (Exception e) {
