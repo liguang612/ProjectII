@@ -66,6 +66,13 @@ public class Header extends JPanel {
             parentFrame.repaint();
         };
 
+        Callback.homepageCallback = () -> {
+            parentFrame.getContentPane().remove(1);
+            parentFrame.getContentPane().add(new Homepage(), gbc);
+            parentFrame.revalidate();
+            parentFrame.repaint();
+        };
+
         Callback.informationCallback = () -> {
             parentFrame.getContentPane().remove(1);
             parentFrame.getContentPane().add(new Information(user), gbc);
@@ -95,7 +102,7 @@ public class Header extends JPanel {
             changeUI();
 
             parentFrame.getContentPane().remove(1);
-            parentFrame.getContentPane().add(new ViewExam(exam), gbc);
+            parentFrame.getContentPane().add(new ViewExam(exam, parentFrame), gbc);
 
             parentFrame.revalidate();
             parentFrame.repaint();

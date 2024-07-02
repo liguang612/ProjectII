@@ -10,20 +10,24 @@ import java.util.Calendar;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 import Model.Exam;
+import Resources.Callback;
 import Resources.Constants;
 import Resources.Constants.FontType;
 import View.Components.Button;
 import View.Components.Column;
+import View.Components.Dialog;
 import View.Components.RoundedPanel;
 import View.Components.Row;
+import View.Quiz.Quiz;
 
 public class ViewExam extends JPanel {
-  public ViewExam(Exam exam) {
+  public ViewExam(Exam exam, JFrame parentFrame) {
     super(new BorderLayout());
 
     Button cancel = new Button("Quay lại"), confirm = new Button("Làm bài"), view = new Button("Xem kết quả");
@@ -32,9 +36,21 @@ public class ViewExam extends JPanel {
     RoundedPanel wrapper = new RoundedPanel(18, Constants.gray02);
 
     cancel.setBackground(Constants.gray02);
+    cancel.addActionListener(e -> {
+      Callback.homepageCallback.backToHomepage();
+    });
 
     confirm.setBackground(Constants.blue01);
     confirm.setForeground(Color.WHITE);
+    confirm.addActionListener(e -> {
+      String msg = "<html><b>Lưu ý:</b> Bạn sẽ không thể thoát ra trong quá trình làm bài. Nếu thoát ra, hệ thống sẽ tự động nộp bài của bạn!</html>";
+
+      new Dialog(parentFrame, msg, x -> {
+        parentFrame.setEnabled(false);
+        new Quiz(exam, parentFrame);
+        return true;
+      });
+    });
 
     name.setFont(Constants.getFont(FontType.QUICKSAND_BOLD));
 
@@ -47,7 +63,7 @@ public class ViewExam extends JPanel {
     wrapper.setLayout(new GridLayout(1, 1));
     wrapper.setMaximumSize(new Dimension(578, 467));
     wrapper.setMinimumSize(new Dimension(578, 467));
-    wrapper.add(new Column(12, JPanel.LEFT_ALIGNMENT, name,
+    wrapper.add(new Column(12, new Row(0, Box.createHorizontalGlue(), name, Box.createHorizontalGlue()),
         new JSeparator(),
         new Row(0, new JLabel(exam.getDescription()), Box.createHorizontalGlue()),
         new Row(0, new JLabel("<html>Thời gian: <b>" + exam.getDuration() + "</b></html>",

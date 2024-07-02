@@ -149,6 +149,10 @@ public class Exam {
     return teacherId;
   }
 
+  public int getQuestionCount() {
+    return easies + mediums + hards;
+  }
+
   public float getTotal() {
     return easies * easyPts + mediums * mediumPts + hards * hardPts;
   }
