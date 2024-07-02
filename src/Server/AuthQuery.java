@@ -8,6 +8,51 @@ import Model.Account;
 import Resources.Tools;
 
 public class AuthQuery {
+    public static boolean changeInformation(Account account) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database.prepareStatement(
+                        "UPDATE ACCOUNT SET NAME = ?, DOB = ?, PHONENUMBER = ?, EMAIL = ?, SCHOOL = ?, CLASS = ?, [IMAGE] = ? WHERE ID = ?");
+
+                preparedStatement.setString(1, account.getName());
+                preparedStatement.setDate(2, account.getDob());
+                preparedStatement.setString(3, account.getPhoneNumber());
+                preparedStatement.setString(4, account.getEmail());
+                preparedStatement.setString(5, account.getSchool());
+                preparedStatement.setString(6, account.getclass());
+                preparedStatement.setBytes(7,
+                        account.getImage() == null ? null : Tools.imageToBytes(account.getImage()));
+                preparedStatement.setInt(8, account.getId());
+
+                return preparedStatement.executeUpdate() > 0;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean checkPassword(int userId, String password) {
+        if (DBConnection.database != null) {
+            try {
+                PreparedStatement preparedStatement = DBConnection.database
+                        .prepareStatement("SELECT [PASSWORD] FROM LOGIN WHERE ID = ?");
+
+                preparedStatement.setInt(1, userId);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    System.out.println(resultSet.getString(1));
+                    return password.equals(resultSet.getString(1));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
+    }
 
     public static Account login(String username, String password) {
         if (DBConnection.database != null) {

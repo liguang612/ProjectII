@@ -26,6 +26,8 @@ import Resources.Callback;
 import Resources.Constants;
 import Resources.Tools;
 import View.Homepage;
+import View.Account.CheckPassword;
+import View.Account.Information;
 import View.Account.Login;
 import View.Account.SignUp;
 import View.Exam.AddExam;
@@ -43,6 +45,9 @@ public class Header extends JPanel {
     public Header(JFrame parentFrame, GridBagConstraints gbc) {
         super(new BorderLayout());
 
+        JMenuItem information = new JMenuItem("Tài khoản", new ImageIcon(Constants.imagePath + "ic_account.png")),
+                signOut = new JMenuItem("Đăng xuất", new ImageIcon(Constants.imagePath + "ic_sign_out.png"));
+
         Callback.createExamCallback = () -> {
             parentFrame.getContentPane().remove(1);
             parentFrame.getContentPane().add(new AddExam(user), gbc);
@@ -54,6 +59,14 @@ public class Header extends JPanel {
         Callback.editExamCallback = (Exam exam) -> {
             parentFrame.getContentPane().remove(1);
             parentFrame.getContentPane().add(new EditExam(exam, parentFrame), gbc);
+
+            parentFrame.revalidate();
+            parentFrame.repaint();
+        };
+
+        Callback.informationCallback = () -> {
+            parentFrame.getContentPane().remove(1);
+            parentFrame.getContentPane().add(new Information(user), gbc);
 
             parentFrame.revalidate();
             parentFrame.repaint();
@@ -97,6 +110,10 @@ public class Header extends JPanel {
             parentFrame.revalidate();
             parentFrame.repaint();
         };
+
+        information.addActionListener(e -> {
+            new CheckPassword(parentFrame, user.getId());
+        });
 
         home = new Button("Trang chủ");
         home.addActionListener(new ActionListener() {
@@ -143,10 +160,8 @@ public class Header extends JPanel {
         });
         manageExam.setBackground(Color.WHITE);
 
-        JMenuItem detail = new JMenuItem("Tài khoản", new ImageIcon(Constants.imagePath + "ic_account.png")),
-                signOut = new JMenuItem("Đăng xuất", new ImageIcon(Constants.imagePath + "ic_sign_out.png"));
         popupMenu = new JPopupMenu();
-        popupMenu.add(detail);
+        popupMenu.add(information);
         popupMenu.add(signOut);
 
         signOut.addActionListener(e -> {
