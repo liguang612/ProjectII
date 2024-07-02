@@ -68,6 +68,7 @@ public class Homepage extends JPanel {
                     for (Exam exam : exams) {
                         RoundedPanel tmpPanel = new RoundedPanel(16), tmp2Panel = new RoundedPanel(0);
                         tmpPanel.setBackground(Constants.neutral02);
+                        tmpPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
                         tmpPanel.setLayout(new GridLayout(1, 1));
 
                         Account account = AuthCtrl.getUser(exam.getTeacherId());
@@ -89,9 +90,7 @@ public class Homepage extends JPanel {
                                 "</b></nobr></html>"));
 
                         tmpPanel.add(new Row(16,
-                                Box.createHorizontalStrut(8),
                                 new Column(12,
-                                        Box.createHorizontalStrut(8),
                                         new Row(0, name, Box.createHorizontalGlue()),
                                         new Row(0, new JLabel(exam.getDescription()), Box.createHorizontalGlue()),
                                         new JSeparator(JSeparator.HORIZONTAL),
@@ -107,11 +106,9 @@ public class Homepage extends JPanel {
                                                 new JLabel("<html>GV: <b>" + account.getName() + "</b> - "
                                                         + account.getSchool() + "</html>"),
                                                 Box.createHorizontalGlue(),
-                                                view),
-                                        Box.createHorizontalStrut(8)),
+                                                view)),
                                 new Column(0, Box.createVerticalGlue(), tmp2Panel,
-                                        Box.createVerticalGlue()),
-                                Box.createHorizontalStrut(8)));
+                                        Box.createVerticalGlue())));
 
                         leftPanel.add(tmpPanel, leftPanel.getComponentCount() - 1);
                     }

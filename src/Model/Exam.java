@@ -149,6 +149,10 @@ public class Exam {
     return teacherId;
   }
 
+  public float getTotal() {
+    return easies * easyPts + mediums * mediumPts + hards * hardPts;
+  }
+
   public void setName(String name) {
     this.name = name;
   }

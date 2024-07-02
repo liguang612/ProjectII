@@ -73,7 +73,6 @@ public class Login extends JPanel {
 
         loginPanel = new RoundedPanel(18, Constants.gray02);
         loginPanel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-        loginPanel.setBackground(Color.WHITE);
         loginPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
         loginPanel.setMaximumSize(new Dimension(578, 667));

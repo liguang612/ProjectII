@@ -34,6 +34,7 @@ import View.Account.SignUp;
 import View.Exam.AddExam;
 import View.Exam.EditExam;
 import View.Exam.ManageExam;
+import View.Exam.ViewExam;
 
 public class Header extends JPanel {
     private Button manageExam, home, login, signup;
@@ -89,6 +90,15 @@ public class Header extends JPanel {
                 Callback.toastCallback.callbackToast("Bạn không phải là HSSV!", ToastType.WARNING);
                 return;
             }
+
+            isSelected = -1;
+            changeUI();
+
+            parentFrame.getContentPane().remove(1);
+            parentFrame.getContentPane().add(new ViewExam(exam), gbc);
+
+            parentFrame.revalidate();
+            parentFrame.repaint();
         };
 
         Callback.userCallback = (user) -> {
