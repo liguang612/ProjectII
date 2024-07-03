@@ -199,6 +199,7 @@ public class Header extends JPanel {
             rightPanel.remove(account);
             if (user.getRole() == 1) {
                 rightPanel.remove(manageExam);
+                rightPanel.remove(viewResults);
             }
             user = null;
             rightPanel.add(login);

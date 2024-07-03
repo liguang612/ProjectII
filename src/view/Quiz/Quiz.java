@@ -175,7 +175,6 @@ public class Quiz extends JFrame {
   }
 
   private void submitQuiz(Exam exam) {
-    System.out.println("submittt");
     float grade = 0;
 
     for (Component component : rightPanel.getComponents()) {
