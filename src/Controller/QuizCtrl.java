@@ -3,6 +3,7 @@ package Controller;
 import java.util.ArrayList;
 import java.util.Random;
 
+import Model.Attempt;
 import Model.Choice;
 import Model.Exam;
 import Model.Question;
@@ -59,5 +60,9 @@ public class QuizCtrl {
 
   public static ArrayList<Choice> getAllChoices(int questionId) {
     return ExamQuery.getAllChoice(questionId);
+  }
+
+  public static boolean submitQuiz(Attempt attempt) {
+    return QuizQuery.submitQuiz(attempt);
   }
 }

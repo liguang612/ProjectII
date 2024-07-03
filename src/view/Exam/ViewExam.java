@@ -27,7 +27,7 @@ import View.Components.Row;
 import View.Quiz.Quiz;
 
 public class ViewExam extends JPanel {
-  public ViewExam(Exam exam, JFrame parentFrame) {
+  public ViewExam(Exam exam, int userId, JFrame parentFrame) {
     super(new BorderLayout());
 
     Button cancel = new Button("Quay lại"), confirm = new Button("Làm bài"), view = new Button("Xem kết quả");
@@ -47,7 +47,7 @@ public class ViewExam extends JPanel {
 
       new Dialog(parentFrame, msg, x -> {
         parentFrame.setEnabled(false);
-        new Quiz(exam, parentFrame);
+        new Quiz(exam, userId, parentFrame);
         return true;
       });
     });

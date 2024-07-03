@@ -1,12 +1,17 @@
 package View.Quiz;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -15,10 +20,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.Timer;
 
 import Controller.QuizCtrl;
+import Model.Attempt;
 import Model.Exam;
 import Model.Question;
 import Resources.Callback;
@@ -35,18 +40,23 @@ public class Quiz extends JFrame {
   ArrayList<Button> questionButtons = new ArrayList<>();
   ArrayList<Question> questions;
   Button submit;
-  int timeRemaining;
+  Date start;
+  int timeRemaining, userId;
+  JPanel leftPanel, rightPanel;
   RoundedPanel controlPanel;
   Timer timer;
 
-  public Quiz(Exam exam, JFrame parentFrame) {
+  public Quiz(Exam exam, int userId, JFrame parentFrame) {
     super();
 
+    start = new Date();
     timeRemaining = exam.getDuration() * 60;
+    this.userId = userId;
 
     GridBagConstraints gbc = new GridBagConstraints();
     JLabel timeLabel = new JLabel("Thời gian còn lại: " + Tools.toTime(timeRemaining));
-    JPanel leftPanel = new JPanel(), rightPanel = new JPanel();
+    leftPanel = new JPanel();
+    rightPanel = new JPanel();
     JScrollPane scrollPane = new JScrollPane(rightPanel);
 
     getContentPane().setBackground(Constants.gray01);
@@ -68,6 +78,8 @@ public class Quiz extends JFrame {
       }
 
       public void windowClosed(WindowEvent we) {
+        submitQuiz(exam);
+
         parentFrame.setEnabled(true);
         parentFrame.toFront();
 
@@ -80,15 +92,18 @@ public class Quiz extends JFrame {
     controlPanel.setLayout(new GridLayout(0, 5, 10, 10));
     for (int i = 0; i < exam.getQuestionCount(); i++) {
       Button button = new Button("" + (i + 1));
+      final int idx = i;
+
       button.setBorderColor(Constants.gray02);
       button.setRadius(10);
-      button.addActionListener(e -> {
-
+      button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent ae) {
+          rightPanel.scrollRectToVisible(rightPanel.getComponent(idx).getBounds());
+        }
       });
 
-      questionButtons.add(button);
-
       controlPanel.add(button);
+      questionButtons.add(button);
     }
 
     submit = new Button("Nộp bài");
@@ -96,8 +111,6 @@ public class Quiz extends JFrame {
     submit.setForeground(Color.WHITE);
     submit.addActionListener(e -> {
       new Dialog(this, "Bạn vẫn muốn nộp bài khi còn thời gian chứ?", x -> {
-        submitQuiz();
-
         parentFrame.setEnabled(true);
         parentFrame.toFront();
         timer.stop();
@@ -117,8 +130,6 @@ public class Quiz extends JFrame {
       if (timeRemaining == 0) {
         parentFrame.setEnabled(true);
         parentFrame.toFront();
-
-        submitQuiz();
 
         timer.stop();
         this.dispose();
@@ -146,7 +157,6 @@ public class Quiz extends JFrame {
 
         return true;
       }));
-      rightPanel.add(new JSeparator());
     }
 
     gbc.anchor = GridBagConstraints.CENTER;
@@ -164,6 +174,20 @@ public class Quiz extends JFrame {
     setVisible(true);
   }
 
-  private void submitQuiz() {
+  private void submitQuiz(Exam exam) {
+    System.out.println("submittt");
+    float grade = 0;
+
+    for (Component component : rightPanel.getComponents()) {
+      QuestionItem qi = (QuestionItem) component;
+      Question question = qi.getQuestion();
+
+      grade += qi.submit() * (question.getLevel() == 0 ? exam.getEasyPts()
+          : question.getLevel() == 1 ? exam.getMediumPts() : exam.getHardPts());
+    }
+
+    Date end = new Date();
+
+    QuizCtrl.submitQuiz(new Attempt(exam.getId(), userId, end.getTime() - start.getTime(), grade, start));
   }
 }

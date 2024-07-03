@@ -2,8 +2,10 @@ package Server;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import Model.Attempt;
 import Model.Question;
 import Resources.Tools;
 
@@ -30,5 +32,27 @@ public class QuizQuery {
       }
     }
     return questions;
+  }
+
+  public static boolean submitQuiz(Attempt attempt) {
+    if (DBConnection.database != null) {
+      try {
+        PreparedStatement preparedStatement = DBConnection.database
+            .prepareStatement("INSERT INTO ATTEMPT VALUES(?, ?, ?, ?, ?, ?)");
+
+        preparedStatement.setInt(1, attempt.getExamId());
+        preparedStatement.setInt(2, attempt.getStudentId());
+        preparedStatement.setLong(3, attempt.getDuration());
+        preparedStatement.setFloat(4, attempt.getGrade());
+        preparedStatement.setTimestamp(5, new Timestamp(attempt.getTimeStart().getTime()));
+        preparedStatement.setBoolean(6, true);
+
+        return preparedStatement.executeUpdate() > 0;
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    return false;
   }
 }

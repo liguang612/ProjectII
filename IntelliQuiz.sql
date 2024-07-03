@@ -79,7 +79,7 @@ CREATE TABLE ATTEMPT (
     ID INT IDENTITY(1, 1),
     EXAM INT NOT NULL,
     STUDENT INT NOT NULL,
-    DURATION INT NOT NULL, -- Thời gian làm bài của sinh viên
+    DURATION BIGINT NOT NULL, -- Thời gian làm bài của sinh viên
     GRADE FLOAT NOT NULL, -- Điểm của lần thi
     TIMESTART DATETIME NOT NULL, -- Thời gian bắt đầu làm bài
     SUBMITTED BIT NOT NULL -- Xác định đã nộp bài chưa
@@ -99,3 +99,4 @@ ALTER TABLE ATTEMPT_DETAIL ADD CONSTRAINT fk_attemptDetail_choice FOREIGN KEY(CH
 SELECT * FROM EXAM
 SELECT * FROM QUESTION
 SELECT * FROM CHOICE
+SELECT * FROM ATTEMPT

@@ -102,7 +102,7 @@ public class Header extends JPanel {
             changeUI();
 
             parentFrame.getContentPane().remove(1);
-            parentFrame.getContentPane().add(new ViewExam(exam, parentFrame), gbc);
+            parentFrame.getContentPane().add(new ViewExam(exam, user.getId(), parentFrame), gbc);
 
             parentFrame.revalidate();
             parentFrame.repaint();
