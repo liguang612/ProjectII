@@ -58,6 +58,10 @@ public class QuizCtrl {
     return quiz;
   }
 
+  public static ArrayList<Attempt> getAllAttempt(int userId) {
+    return QuizQuery.getAllAttempt(userId);
+  }
+
   public static ArrayList<Choice> getAllChoices(int questionId) {
     return ExamQuery.getAllChoice(questionId);
   }

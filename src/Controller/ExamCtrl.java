@@ -64,6 +64,10 @@ public class ExamCtrl {
     return ExamQuery.getAllQuestion(examId);
   }
 
+  public static Exam getExam(int examId) {
+    return ExamQuery.getExam(examId);
+  }
+
   public static ArrayList<Exam> searchExam(String keyword) {
     return ExamQuery.searchExam(keyword);
   }

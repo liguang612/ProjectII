@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -384,6 +385,40 @@ public class ExamQuery {
     }
 
     return questions;
+  }
+
+  public static Exam getExam(int examId) {
+    if (DBConnection.database != null) {
+      try {
+        PreparedStatement preparedStatement = DBConnection.database.prepareStatement("SELECT * FROM EXAM WHERE ID = ?");
+
+        preparedStatement.setInt(1, examId);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+          return new Exam(resultSet.getInt(1),
+              resultSet.getString(2),
+              resultSet.getString(3),
+              new Date(),
+              new Date(),
+              resultSet.getString(6),
+              resultSet.getInt(7),
+              false,
+              false,
+              resultSet.getInt(10),
+              resultSet.getFloat(11),
+              resultSet.getInt(12),
+              resultSet.getFloat(13),
+              resultSet.getInt(14),
+              resultSet.getInt(15),
+              resultSet.getInt(16));
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    return null;
   }
 
   public static ArrayList<Exam> searchExam(String keyword) {

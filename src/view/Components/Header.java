@@ -35,9 +35,10 @@ import View.Exam.AddExam;
 import View.Exam.EditExam;
 import View.Exam.ManageExam;
 import View.Exam.ViewExam;
+import View.Results.ViewResults;
 
 public class Header extends JPanel {
-    private Button manageExam, home, login, signup;
+    private Button home, login, manageExam, signup, viewResults;
     private int isSelected = 0;
     private JLabel account;
     private JPanel leftPanel, rightPanel;
@@ -128,6 +129,8 @@ public class Header extends JPanel {
             rightPanel.add(home);
             if (user.getRole() == 1)
                 rightPanel.add(manageExam);
+            else
+                rightPanel.add(viewResults);
             rightPanel.add(account);
 
             rightPanel.revalidate();
@@ -229,6 +232,21 @@ public class Header extends JPanel {
         signup.setForeground(Color.WHITE);
         signup.setMargin(new Insets(12, 24, 12, 24));
 
+        viewResults = new Button("Xem kết quả");
+        viewResults.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                parentFrame.getContentPane().remove(1);
+                parentFrame.getContentPane().add(new ViewResults(user.getId()), gbc);
+
+                isSelected = 2;
+                changeUI();
+
+                parentFrame.revalidate();
+                parentFrame.repaint();
+            }
+        });
+        viewResults.setBackground(Color.WHITE);
+
         changeUI();
 
         leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -260,6 +278,12 @@ public class Header extends JPanel {
 
             manageExam.setBorder(BorderFactory.createMatteBorder(0, 0, 4, 0, Constants.blue01));
             manageExam.setFont(manageExam.getFont().deriveFont(Font.BOLD));
+        } else if (isSelected == 2) {
+            home.setBorder(null);
+            home.setFont(home.getFont().deriveFont(Font.PLAIN));
+
+            viewResults.setBorder(BorderFactory.createMatteBorder(0, 0, 4, 0, Constants.blue01));
+            viewResults.setFont(manageExam.getFont().deriveFont(Font.BOLD));
         } else {
             home.setBorder(null);
         }
