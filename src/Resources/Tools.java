@@ -104,4 +104,14 @@ public class Tools {
 
         return null;
     }
+
+    public static String toTime(int second) {
+        String str = "" + second / 3600;
+        second %= 3600;
+        str += ":" + second / 60;
+        second %= 60;
+        str += ":" + second;
+
+        return str;
+    }
 }

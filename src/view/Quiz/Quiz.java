@@ -12,14 +12,19 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.Timer;
 
 import Controller.QuizCtrl;
 import Model.Exam;
 import Model.Question;
+import Resources.Callback;
 import Resources.Constants;
+import Resources.Tools;
+import Resources.Constants.ToastType;
 import View.Components.Button;
 import View.Components.Column;
 import View.Components.Dialog;
@@ -30,12 +35,17 @@ public class Quiz extends JFrame {
   ArrayList<Button> questionButtons = new ArrayList<>();
   ArrayList<Question> questions;
   Button submit;
+  int timeRemaining;
   RoundedPanel controlPanel;
+  Timer timer;
 
   public Quiz(Exam exam, JFrame parentFrame) {
     super();
 
+    timeRemaining = exam.getDuration() * 60;
+
     GridBagConstraints gbc = new GridBagConstraints();
+    JLabel timeLabel = new JLabel("Thời gian còn lại: " + Tools.toTime(timeRemaining));
     JPanel leftPanel = new JPanel(), rightPanel = new JPanel();
     JScrollPane scrollPane = new JScrollPane(rightPanel);
 
@@ -60,6 +70,8 @@ public class Quiz extends JFrame {
       public void windowClosed(WindowEvent we) {
         parentFrame.setEnabled(true);
         parentFrame.toFront();
+
+        timer.stop();
       }
     });
 
@@ -71,6 +83,7 @@ public class Quiz extends JFrame {
       button.setBorderColor(Constants.gray02);
       button.setRadius(10);
       button.addActionListener(e -> {
+
       });
 
       questionButtons.add(button);
@@ -81,8 +94,44 @@ public class Quiz extends JFrame {
     submit = new Button("Nộp bài");
     submit.setBackground(Constants.blue01);
     submit.setForeground(Color.WHITE);
+    submit.addActionListener(e -> {
+      new Dialog(this, "Bạn vẫn muốn nộp bài khi còn thời gian chứ?", x -> {
+        submitQuiz();
 
-    leftPanel.add(new Column(12, controlPanel,
+        parentFrame.setEnabled(true);
+        parentFrame.toFront();
+        timer.stop();
+        this.dispose();
+
+        Callback.homepageCallback.backToHomepage();
+
+        return true;
+      });
+      timer.stop();
+    });
+
+    timer = new Timer(950, e -> {
+      timeRemaining--;
+      timeLabel.setText("Thời gian còn lại: " + Tools.toTime(timeRemaining));
+
+      if (timeRemaining == 0) {
+        parentFrame.setEnabled(true);
+        parentFrame.toFront();
+
+        submitQuiz();
+
+        timer.stop();
+        this.dispose();
+
+        Callback.homepageCallback.backToHomepage();
+        Callback.toastCallback.callbackToast("Bạn đã hết giờ làm bài!", ToastType.WARNING);
+      }
+    });
+    timer.start();
+    timeLabel.setBorder(BorderFactory.createLineBorder(Constants.gray01, 1));
+
+    leftPanel.add(new Column(12, new Row(0, Box.createHorizontalGlue(), timeLabel, Box.createHorizontalGlue()),
+        controlPanel,
         new Row(0, Box.createHorizontalGlue(), submit, Box.createHorizontalGlue())));
 
     questions = QuizCtrl.generateQuiz(exam);
@@ -113,5 +162,8 @@ public class Quiz extends JFrame {
     getContentPane().add(scrollPane, gbc);
 
     setVisible(true);
+  }
+
+  private void submitQuiz() {
   }
 }
