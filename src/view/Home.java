@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import Resources.Callback;
+import Resources.Constants;
 import View.Components.Header;
 import View.Components.Toast;
 
@@ -22,6 +24,7 @@ public class Home {
         homeFrame.getContentPane().setBackground(Color.WHITE);
         homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         homeFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        homeFrame.setIconImage(new ImageIcon(Constants.imagePath + "IntelliQuiz.ico").getImage());
         homeFrame.setLayout(gb);
         homeFrame.setSize(1000, 500);
 
